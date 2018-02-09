@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>{% if page.title %}{{ page.title }}{% else %}{{ site.title }}{% endif %}</title>
+        <meta name="description" content="{% if page.excerpt %}{{ page.excerpt | strip_html | strip_newlines | truncate: 160 }}{% else %}{{ site.description }}{% endif %}">
+        <link rel="stylesheet" href="{{ "/assets/css/main.css" | prepend: site.baseurl }}">
+    </head>
+    <body {% if page.bodyclass %}class="{{ page.bodyclass }}"{% endif %}>
+        <script>document.body.className = ((document.body.className) ? document.body.className + ' js-enabled' : 'js-enabled');</script>
+
+        <div class="site-header">
+            <div class="container">
+                <img src="{{ "/assets/images/Hackney_Logo_White.png" | prepend: site.baseurl }}" width="211" height="38" alt="London Borough of Hackney">
+            </div>
+        </div>
+
+        <div class="site-wrapper">
+            <main id="content" role="main">
+                {{ content }}
+            </main>
+        </div>
+
+        <div class="site-footer">
+        </div>
+
+        <script src="{{ "/vendor/jquery/jquery-1.11.3.min.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/vendor/govuk_frontend_toolkit/javascripts/vendor/polyfills/bind.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/vendor/govuk_frontend_toolkit/javascripts/govuk/details.polyfill.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/vendor/govuk_frontend_toolkit/javascripts/govuk/shim-links-with-button-role.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/vendor/govuk_frontend_toolkit/javascripts/govuk/show-hide-content.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/vendor/govuk_elements/assets/javascripts/application.js" | prepend: site.baseurl }}"></script>
+        <script src="{{ "/assets/js/main.js" | prepend: site.baseurl }}"></script>
+
+        <script>if (typeof window.GOVUK === 'undefined') document.body.className = document.body.className.replace('js-enabled', '');</script>
+    </body>
+</html>

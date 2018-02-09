@@ -1,0 +1,36 @@
+$hackney-font-stack: "Droid Sans", sans-serif;
+
+// Pre-override the default in vendor/govuk_frontend_toolkit/stylesheets/_typography.scss
+$toolkit-font-stack: $hackney-font-stack;
+
+// Used by file-url() in vendor/govuk_frontend_toolkit/stylesheets/_url-helpers.scss
+$path: "#{$baseurl}/vendor/govuk_frontend_toolkit/images/";
+
+@import "frontend-toolkit"; // vendor/govuk_elements/assets/sass/_frontend-toolkit.scss
+@import "elements"; // vendor/govuk_elements/assets/sass/_elements.scss
+
+@import "govuk-template-basics";
+@import "govuk-template-accessibility";
+
+.container {
+    @extend %site-width-container;
+}
+
+.site-header {
+    background-color: #000;
+    padding: 1em 0;
+
+    img {
+        margin-top: 0.5em; // compensate for vertical alignment of "Hackney"
+    }
+}
+
+.site-footer {
+    background-color: $footer-background;
+    border-top: 1px solid $footer-border-top;
+    padding-top: 20px;
+
+    @include media(tablet) {
+        padding-top: 60px;
+    }
+}

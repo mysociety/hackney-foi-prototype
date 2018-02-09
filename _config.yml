@@ -1,0 +1,33 @@
+title: Hackney FOI Prototype
+description: >
+  FOI and SAR request forms, for user testing.
+baseurl: ""
+
+markdown: kramdown
+host: 0.0.0.0
+sass:
+  load_paths:
+    - _sass
+    - vendor/govuk_elements/assets/sass
+    - vendor/govuk_frontend_toolkit/stylesheets
+exclude:
+  - vendor/*/*.md
+  - vendor/*/*.json
+  - vendor/*/*.txt
+  - vendor/*/*.sh
+  - vendor/*/*.lock
+  - vendor/*/Gemfile
+  - vendor/*/Gruntfile.js
+  - vendor/*/LICENCE
+  - vendor/*/Procfile
+  - vendor/govuk_elements/app/
+  - vendor/govuk_elements/assets/sass/
+  - vendor/govuk_elements/config/
+  - vendor/govuk_elements/gulpfile.js
+  - vendor/govuk_elements/server.js
+  - vendor/govuk_elements/scripts/
+  - vendor/govuk_elements/test/
+  - vendor/govuk_elements/tests/
+  - vendor/govuk_frontend_toolkit/docs/
+  - vendor/govuk_frontend_toolkit/spec/
+  - vendor/govuk_frontend_toolkit/stylesheets/

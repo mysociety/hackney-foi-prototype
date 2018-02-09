@@ -1,0 +1,6 @@
+[submodule "vendor/govuk_frontend_toolkit"]
+	path = vendor/govuk_frontend_toolkit
+	url = https://github.com/alphagov/govuk_frontend_toolkit.git
+[submodule "vendor/govuk_elements"]
+	path = vendor/govuk_elements
+	url = https://github.com/alphagov/govuk_elements.git
