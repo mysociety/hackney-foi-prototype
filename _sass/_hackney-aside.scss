@@ -1,0 +1,39 @@
+.form-aside {
+    visibility: hidden;
+    padding: 1.5em;
+    background-color: $light-blue-10;
+
+    @include media(tablet) {
+        margin-top: 1.3em; // same height as a form label
+        margin-left: -3em;
+
+        opacity: 0;
+        transform: translate(-2em, 0);
+        transition: opacity 0.5s, transform 0.5s;
+    }
+
+    & > :first-child {
+        margin-top: 0;
+    }
+
+    ul {
+        margin: 0;
+    }
+
+    li {
+        margin: 0.7em 0 0 0;
+    }
+
+    & > ul:first-child > li:first-child {
+        margin-top: 0;
+    }
+}
+
+.form-aside--active {
+    visibility: visible;
+
+    @include media(tablet) {
+        opacity: 1;
+        transform: translate(0);
+    }
+}

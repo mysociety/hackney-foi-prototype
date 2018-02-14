@@ -1,0 +1,14 @@
+.heading-xsmall {
+    @include bold-16();
+}
+
+main > .heading-xlarge {
+    margin-top: 1.25em;
+    margin-bottom: 0.625em;
+}
+
+.govuk-box-highlight {
+    @include media(tablet) {
+        margin: 2em 0;
+    }
+}

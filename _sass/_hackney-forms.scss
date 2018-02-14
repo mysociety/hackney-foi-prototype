@@ -1,0 +1,16 @@
+.button-start,
+.button-get-started {
+    padding: em(7) em(41) em(7) em(16);
+}
+
+.button-secondary {
+    @include button($grey-3);
+}
+
+.cta-section {
+    margin: 2em 0;
+
+    .button + .button {
+        margin-left: 0.5em;
+    }
+}

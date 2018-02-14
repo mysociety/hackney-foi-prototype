@@ -1,0 +1,22 @@
+.container {
+    @extend %site-width-container;
+}
+
+.site-header {
+    background-color: #000;
+    padding: 1em 0;
+
+    img {
+        margin-top: 0.5em; // compensate for vertical alignment of "Hackney"
+    }
+}
+
+.site-footer {
+    background-color: $footer-background;
+    border-top: 1px solid $footer-border-top;
+    padding-top: 20px;
+
+    @include media(tablet) {
+        padding-top: 60px;
+    }
+}
