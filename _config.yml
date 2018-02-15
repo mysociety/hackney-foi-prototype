@@ -18,19 +18,27 @@ exclude:
   - vendor/*/*.json
   - vendor/*/*.txt
   - vendor/*/*.sh
+  - vendor/*/*.sublime-project
   - vendor/*/*.lock
+  - vendor/*/Changelog
   - vendor/*/Gemfile
   - vendor/*/Gruntfile.js
+  - vendor/*/gulpfile.js
   - vendor/*/LICENCE
+  - vendor/*/LICENSE
+  - vendor/*/Makefile
   - vendor/*/Procfile
+  - vendor/*/test
+  - vendor/*/tests
   - vendor/govuk_elements/app/
   - vendor/govuk_elements/assets/sass/
   - vendor/govuk_elements/config/
   - vendor/govuk_elements/gulpfile.js
   - vendor/govuk_elements/server.js
   - vendor/govuk_elements/scripts/
-  - vendor/govuk_elements/test/
-  - vendor/govuk_elements/tests/
   - vendor/govuk_frontend_toolkit/docs/
   - vendor/govuk_frontend_toolkit/spec/
   - vendor/govuk_frontend_toolkit/stylesheets/
+  - vendor/jsrender/demos
+  - vendor/jsrender/tmplify
+  - vendor/storejs/src

@@ -4,3 +4,9 @@
 [submodule "vendor/govuk_elements"]
 	path = vendor/govuk_elements
 	url = https://github.com/alphagov/govuk_elements.git
+[submodule "vendor/storejs"]
+	path = vendor/storejs
+	url = https://github.com/marcuswestin/store.js.git
+[submodule "vendor/jsrender"]
+	path = vendor/jsrender
+	url = https://github.com/BorisMoore/jsrender.git

@@ -7,6 +7,10 @@
     @include button($grey-3);
 }
 
+.button-warning {
+    @include button($red);
+}
+
 .cta-section {
     margin: 2em 0;
 
