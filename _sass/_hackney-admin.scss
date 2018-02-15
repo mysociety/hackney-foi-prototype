@@ -1,3 +1,13 @@
+body.admin {
+    &:before {
+        content: "";
+        display: block;
+        height: 1em;
+        background-color: yellow;
+        background-image: repeating-linear-gradient(-45deg, yellow, yellow 20px, black 20px, black 40px);
+    }
+}
+
 .session-list {
     li {
         padding: 1em 0;
