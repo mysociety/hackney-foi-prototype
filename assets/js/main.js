@@ -47,6 +47,24 @@ $(function(){
         });
     });
 
+    $('[data-inputs-must-match]').on('change', function(){
+        var $el = $(this);
+        var $twin = $( $el.attr('data-inputs-must-match') );
+        var $formGroup = $el.parents('.form-group');
+
+        if ( $el.val() == $twin.val() ) {
+            $formGroup.removeClass('form-group-error');
+            $formGroup.find('.error-message').remove();
+            $formGroup.find('.form-control-error').removeClass('form-control-error');
+        } else {
+            var $error = $('<span role="alert">').addClass('error-message');
+            $error.text( $el.attr('data-inputs-mismatch-hint') );
+            $error.insertBefore( $el );
+            $formGroup.addClass('form-group-error');
+            $formGroup.find('.form-control').addClass('form-control-error');
+        }
+    });
+
     $('.js-session-list').each(function(){
         refreshSessionList($(this));
     });
