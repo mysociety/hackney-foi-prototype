@@ -1,7 +1,10 @@
 title: Hackney FOI Prototype
 description: >
   FOI and SAR request forms, for user testing.
-baseurl: ""
+
+# Github Pages will use this baseurl when it deploys the site
+# to http://mysociety.github.io/hackney-foi-prototype/
+baseurl: "/hackney-foi-prototype"
 
 markdown: kramdown
 host: 0.0.0.0
