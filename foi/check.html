@@ -10,7 +10,22 @@ bodyclass: "foi foi-check"
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <p>Your request</p>
+        <table style="max-width: 75%">
+            <tbody>
+                <tr>
+                    <th>Request</th>
+                    <td class="js-session-store" id="foi-request-body" style="white-space: pre"></td>
+                </tr>
+                <tr>
+                    <th>Your name</th>
+                    <td class="js-session-store" id="foi-requestor-name"></td>
+                </tr>
+                <tr>
+                    <th>Your email</th>
+                    <td class="js-session-store" id="foi-requestor-email"></td>
+                </tr>
+            </tbody>
+        </table>
         <p class="cta-section">
             <a href="write.html" class="button button-secondary">Edit your request</a>
             <a href="complete.html" class="button">Send now</a>

@@ -16,3 +16,8 @@ main > .heading-xlarge {
 .muted {
     color: $grey-1;
 }
+
+table tbody th {
+    font-weight: bold;
+    vertical-align: top;
+}

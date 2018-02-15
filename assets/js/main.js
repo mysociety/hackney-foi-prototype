@@ -33,6 +33,10 @@ var refreshSessionList = function refreshSessionList($list){
     });
 };
 
+var isset = function isset(thing){
+    return ( typeof thing !== 'undefined' );
+}
+
 $(function(){
     $('[data-aside]').each(function(){
         var $control = $(this);
@@ -45,5 +49,54 @@ $(function(){
 
     $('.js-session-list').each(function(){
         refreshSessionList($(this));
+    });
+
+    $('.js-session-store').each(function(){
+        var currentSession = window.sessions.current() || window.sessions.create(true);
+        var $el = $(this);
+        var name = $el.attr('name') || $el.attr('id'); // non-form-elements will have an id rather than a name
+
+        if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
+            var bool = isset(currentSession[name]) && currentSession[name] == $el.val();
+            $el.prop('checked', bool);
+
+        } else if ( $el.is('select[multiple]') ) {
+            $el.children('option').each(function(){
+                var bool = isset(currentSession[name]) && currentSession[name].indexOf($(this).attr('value') > -1);
+                $(this).prop('selected', bool);
+            });
+
+        } else if ( $el.is('input, textarea, select') ) {
+            $el.val( currentSession[name] ? currentSession[name] : null );
+
+        } else {
+            $el.text( currentSession[name] ? currentSession[name] : '' );
+
+        }
+    });
+
+    $('.js-session-store').on('change', function(){
+        var currentSession = window.sessions.current() || window.sessions.create(true);
+        var $el = $(this);
+        var name = $el.attr('name');
+
+        if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
+            if ( $el.prop('checked') ) {
+                currentSession[name] = true;
+            } else if ( isset(currentSession[name]) ) {
+                delete currentSession[name];
+            }
+
+        } else if ( $el.is('input, textarea, select') ) {
+            var val = $el.val();
+
+            if ( val ) {
+                currentSession[name] = val;
+            } else if ( isset(currentSession[name]) ) {
+                delete currentSession[name];
+            }
+        }
+
+        window.sessions.save(currentSession);
     });
 });
