@@ -1,0 +1,59 @@
+body.sar-proof {
+    counter-reset: sar-people;
+}
+
+.sar-person {
+    padding: 1em;
+    margin-bottom: 2em;
+    background-color: $light-blue-10;
+
+    @include media(tablet) {
+        padding: 1.5em;
+    }
+
+    h2 {
+        margin: 0;
+
+        &:before {
+            @extend .circle;
+            @extend .circle-step-large;
+            counter-increment: sar-people;
+            content: counter(sar-people);
+            vertical-align: 0.3em;
+            margin-right: 1em;
+        }
+    }
+
+    header {
+        margin-bottom: 2em;
+    }
+
+    .form-aside {
+        background-color: $light-blue-25;
+    }
+
+    // margin-top works better with the optional
+    // "parental responsibility" group at the end.
+    .form-group {
+        margin-bottom: 0;
+
+        & + .form-group {
+            margin-top: $gutter-half;
+
+            @include media(tablet) {
+                margin-top: $gutter;
+            }
+        }
+    }
+}
+
+.sar-person--add {
+    display: block;
+
+    &:before {
+        @extend .circle;
+        @extend .circle-step-large;
+        content: "+";
+        margin-right: 1em;
+    }
+}

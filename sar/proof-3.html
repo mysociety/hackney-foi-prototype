@@ -1,0 +1,43 @@
+---
+layout: default
+title: "Proof of identity: Upload"
+bodyclass: "sar sar-proof-3"
+---
+
+<h1 class="heading-xlarge">Proof of identity: Upload</h1>
+
+<div class="text">
+    <p class="lede">We ask for proof of identity to make sure that personal data is only given to people who are allowed to see it.</p>
+</div>
+
+<form class="sar-person">
+    <header>
+        <input type="hidden" name="sar-subject-name" id="sar-subject-name" class="js-session-store">
+        <h2 class="heading-large" data-text-reflects-input="#sar-subject-name">Person #1</h2>
+    </header>
+
+    <div class="form-group">
+        <label class="form-label" for="ni-number">
+            Proof of name
+            <span class="form-hint">
+                Driving license, passport, or birth certificate
+            </span>
+        </label>
+        <input type="file" name="sar-proof-of-name" id="sar-proof-of-name">
+    </div>
+
+    <div class="form-group">
+        <label class="form-label" for="ni-number">
+            Proof of address
+            <span class="form-hint">
+                Utility bill, bank statement, or council tax bill
+            </span>
+        </label>
+        <input type="file" name="sar-proof-of-address" id="sar-proof-of-address">
+    </div>
+</form>
+
+<p class="cta-section">
+    <a class="button button-secondary" href="saved.html">Save and continue later</a>
+    <a class="button" href="type.html">Next</a>
+</p>

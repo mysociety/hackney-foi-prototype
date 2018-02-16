@@ -1,0 +1,65 @@
+---
+layout: default
+title: "Proof of identity"
+bodyclass: "sar sar-proof-2"
+---
+
+<h1 class="heading-xlarge">Proof of identity</h1>
+
+<div class="text">
+    <p class="lede">We ask for proof of identity to make sure that personal data is only given to people who are allowed to see it.</p>
+</div>
+
+<form class="sar-person">
+    <header>
+        <input type="hidden" name="sar-subject-name" id="sar-subject-name" class="js-session-store">
+        <h2 class="heading-large" data-text-reflects-input="#sar-subject-name">Person #1</h2>
+    </header>
+
+    <p>For this person, we need one of:</p>
+
+    <ul class="list-bullet body-text">
+        <li>Driving license</li>
+        <li>Passport</li>
+        <li>Birth certificate</li>
+    </ul>
+
+    <p>And one of:</p>
+
+    <ul class="list-bullet body-text">
+        <li>Utility bill</li>
+        <li>Bank statement</li>
+        <li>Council tax bill</li>
+    </ul>
+
+    <fieldset>
+
+        <legend class="heading-small" style="margin-bottom: 1em;">How would you like to give us these documents?</legend>
+
+        <div class="multiple-choice">
+            <input type="radio" name="sar-proof-delivery-method" id="sar-proof-delivery-method-upload-now" value="upload-now">
+            <label for="sar-proof-delivery-method-upload-now">Upload scans or photographs now</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" name="sar-proof-delivery-method" id="sar-proof-delivery-method-upload-later" value="upload-later">
+            <label for="sar-proof-delivery-method-upload-later">Upload later</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" name="sar-proof-delivery-method" id="sar-proof-delivery-method-post" value="post">
+            <label for="sar-proof-delivery-method-post">Send copies by post</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" name="sar-proof-delivery-method" id="sar-proof-delivery-method-service-centre" value="service-centre">
+            <label for="sar-proof-delivery-method-service-centre">Bring to a council service centre</label>
+        </div>
+
+    </fieldset>
+</form>
+
+<p class="cta-section">
+    <a class="button button-secondary" href="saved.html">Save and continue later</a>
+    <a class="button" href="proof-3.html">Next</a>
+</p>

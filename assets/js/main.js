@@ -37,6 +37,39 @@ var isset = function isset(thing){
     return ( typeof thing !== 'undefined' );
 }
 
+// Calculate distance, in years, between a birth date and either "now" or
+// a second date. Arguments can be either Date objects or date-like strings.
+// Returns an "age" as an integer.
+// Based on: https://stackoverflow.com/a/35302332
+var ageInYears = function ageInYears(birthDate, ageAtDate){
+    if (typeof ageAtDate == "undefined") {
+        ageAtDate = new Date();
+    }
+
+    if (Object.prototype.toString.call(birthDate) !== '[object Date]') {
+        birthDate = new Date(birthDate);
+    }
+    if (Object.prototype.toString.call(ageAtDate) !== '[object Date]') {
+        ageAtDate = new Date(ageAtDate);
+    }
+
+    // Dates will be `null` if Date() conversion failed.
+    if (ageAtDate == null || birthDate == null) {
+        return null;
+    }
+
+    // If month and day of ageAtDate is *before* month and day of birthDate,
+    // (eg: it is now 1st Feb, but birth date is in July) then we will want
+    // to subtract 1 from the final year total.
+    var nextyear = 0;
+    var _m = ageAtDate.getMonth() - birthDate.getMonth();
+    if ( _m < 0 || (_m === 0 && ageAtDate.getDate() < birthDate.getDate()) ) {
+        nextyear = 1;
+    }
+
+    return ageAtDate.getFullYear() - birthDate.getFullYear() - nextyear;
+}
+
 $(function(){
     $('[data-aside]').each(function(){
         var $control = $(this);
@@ -65,6 +98,39 @@ $(function(){
         }
     });
 
+    $('[data-text-reflects-input]').each(function(){
+        var $el = $(this);
+        var originalText = $el.text();
+        var $input = $( $el.attr('data-text-reflects-input') );
+
+        $input.on('change', function(){
+            var inputVal = $.trim( $input.val() );
+            if ( inputVal === '' ){
+                $el.text(originalText);
+            } else {
+                $el.text(inputVal);
+            }
+        });
+    });
+
+    $('[data-show-if-younger-than-18]').each(function(){
+        var $el = $(this);
+        var $input = $( $el.attr('data-show-if-younger-than-18') );
+
+        $input.on('change', function(){
+            var inputVal = $.trim( $input.val() );
+            if ( inputVal === '' ){
+                $el.addClass('js-hidden');
+            } else {
+                if ( ageInYears($input.val()) < 18 ) {
+                    $el.removeClass('js-hidden');
+                } else {
+                    $el.addClass('js-hidden');
+                }
+            }
+        });
+    });
+
     $('.js-session-list').each(function(){
         refreshSessionList($(this));
     });
@@ -91,9 +157,26 @@ $(function(){
             $el.text( currentSession[name] ? currentSession[name] : '' );
 
         }
+
+        // We have changed the contents of the element, so we should be nice
+        // citizens and trigger a `change` event, in case any other `change`
+        // listeners have been attached to this element.
+        // We're reading directly out of the session store, however, so it
+        // would be wasteful to trigger *our own* sessions.save() listener.
+        // We tell our `change` listener to ignore the event by passing a
+        // custom argument of "ignore", which it knows to look out for.
+        $el.trigger('change', ['ignore']);
     });
 
-    $('.js-session-store').on('change', function(){
+    $('.js-session-store').on('change', function(e, customArgument){
+        // If customArgument === 'ignore' then this event has been generated
+        // by our own $('.js-session-store').each() callback, and we know the
+        // element's contents will be fresh out of the store, so we don't need
+        // to waste time saving them again.
+        if ( customArgument === 'ignore' ) {
+            return;
+        }
+
         var currentSession = window.sessions.current() || window.sessions.create(true);
         var $el = $(this);
         var name = $el.attr('name');
