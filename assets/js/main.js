@@ -131,6 +131,27 @@ $(function(){
         });
     });
 
+    // Pre-fill sar-subject-name with sar-requestor-name, if sar-subject==='myself'
+    $('input[name="sar-subject"]').on('change', function(){
+        if ( $('#sar-subject-myself').is(':checked') ) {
+            var currentSession = window.sessions.current() || window.sessions.create(true);
+            if ( isset(currentSession['sar-requestor-name']) ) {
+                currentSession['sar-subject-name'] = currentSession['sar-requestor-name'];
+                window.sessions.save(currentSession);
+            }
+        }
+    });
+
+    // Hide the multi-person stuff if sar-subject==='myself'
+    if ( $('body').is('.sar-proof-1') ) {
+        var currentSession = window.sessions.current() || window.sessions.create(true);
+        if ( isset(currentSession['sar-subject']) && currentSession['sar-subject'] == 'myself' ) {
+            $('h1').text('Tell us more about yourself');
+            $('label[for="sar-subject-other-names"]').text('Other names you have used');
+            $('.sar-person--add').hide();
+        }
+    };
+
     $('.js-session-list').each(function(){
         refreshSessionList($(this));
     });
@@ -183,7 +204,7 @@ $(function(){
 
         if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
             if ( $el.prop('checked') ) {
-                currentSession[name] = true;
+                currentSession[name] = $el.val();
             } else if ( isset(currentSession[name]) ) {
                 delete currentSession[name];
             }
