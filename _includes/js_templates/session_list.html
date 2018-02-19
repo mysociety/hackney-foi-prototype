@@ -1,0 +1,34 @@
+<ul>
+  [[for allSessions]]
+    <li>
+        <div class="pull-right">
+          [[if current]]
+            <span class="active-session">Active</span>
+          [[else]]
+            <button class="button button-secondary js-resume-session" data-session-id="[[:id]]">Resume</button>
+          [[/if]]
+        </div>
+        <details>
+            <summary>[[:id]]</summary>
+            <table>
+              [[props]]
+                <tr>
+                    <th>[[>key]]</th>
+                    <td>[[>prop]]</td>
+                </tr>
+              [[/props]]
+            </table>
+          [[if current]]
+            <button class="button button-secondary js-deactivate-session" data-session-id="[[:id]]">Deactivate session</button>
+          [[/if]]
+            <button class="button button-warning js-destroy-session" data-session-id="[[:id]]">Destroy session</button>
+        </details>
+    </li>
+  [[/for]]
+    <li>
+        <button class="button js-new-session">Start new session</button>
+      [[if allSessions.length]]
+        <button class="button button-warning js-destroy-sessions">Destroy all sessions</button>
+      [[/if]]
+    </li>
+</ul>
