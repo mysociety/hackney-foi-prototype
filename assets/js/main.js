@@ -152,6 +152,31 @@ $(function(){
         }
     };
 
+    // Skip proof-3 (upload) page if another provision method is selected.
+    $('input[name="sar-proof-delivery-method"]').on('change', function(){
+        var $nextButton = $('.cta-section .button:last-child');
+        if ( $('#sar-proof-delivery-method-upload-now').is(':checked') ) {
+            $nextButton.attr('href', 'proof-3.html');
+        } else {
+            $nextButton.attr('href', 'type.html');
+        }
+    });
+
+    $('.js-sar-complete-proof-reminder').each(function(){
+        var currentSession = window.sessions.current() || window.sessions.create(true);
+        var $container = $(this);
+        var proofDelivery = currentSession['sar-proof-delivery-method'];
+        if ( isset(proofDelivery) && proofDelivery !== 'upload' ) {
+            var template = $.templates("#sarCompleteProofReminder");
+            $container.show().html( template.render({
+                currentSession: currentSession,
+                submitted: $('body').is('.sar-complete')
+            }) );
+        } else {
+            $container.hide();
+        }
+    });
+
     $('.js-session-list').each(function(){
         refreshSessionList($(this));
     });
