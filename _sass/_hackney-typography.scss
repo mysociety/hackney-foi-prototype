@@ -25,3 +25,7 @@ table tbody th {
 .data-item.bold-xsmall {
     line-height: 1.25em;
 }
+
+.clearfix {
+    @extend %contain-floats;
+}

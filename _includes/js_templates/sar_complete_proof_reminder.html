@@ -1,4 +1,4 @@
-<div class="error-summary">
+<div class="sar-requirements sar-requirements--emphasised">
     <h2 class="heading-medium error-summary-heading">
       [[if currentSession['sar-proof-delivery-method'] === 'service-centre']]
         Remember to bring us your proof of identity
@@ -19,21 +19,24 @@
       [[/if]]
   [[/if]]
 
-    <p>You must supply one of:</p>
-
-    <ul class="list-bullet body-text">
-        <li>Driving licence</li>
-        <li>Passport</li>
-        <li>Birth certificate</li>
-    </ul>
-
-    <p>And one of:</p>
-
-    <ul class="list-bullet body-text">
-        <li>Utility bill</li>
-        <li>Bank statement</li>
-        <li>Council tax bill</li>
-    </ul>
+    <div class="clearfix" style="margin-bottom: 1em;">
+        <div class="sar-requirements__column">
+            <p>You must supply one of:</p>
+            <ul class="list-bullet body-text">
+                <li>Driving licence</li>
+                <li>Passport</li>
+                <li>Birth certificate</li>
+            </ul>
+        </div>
+        <div class="sar-requirements__column">
+            <p>And one of:</p>
+            <ul class="list-bullet body-text">
+                <li>Utility bill</li>
+                <li>Bank statement</li>
+                <li>Council tax bill</li>
+            </ul>
+        </div>
+    </div>
 
   [[if currentSession['sar-proof-delivery-method'] === 'service-centre']]
     <p><strong>You should bring the documents to:</strong></p>

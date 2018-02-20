@@ -1,4 +1,5 @@
 .sar-requirements {
+    @extend %contain-floats;
     padding: 30px 30px 30px 55px;
     border-top: 1px solid $grey-2;
     border-bottom: 1px solid $grey-2;
@@ -26,6 +27,45 @@
         position: absolute;
         top: 30px;
         left: 0;
+    }
+}
+
+.sar-requirements--emphasised {
+    border: 5px solid $error-colour;
+    margin-top: $gutter-half;
+    margin-bottom: $gutter-half;
+    padding: 30px 30px 30px 85px;
+
+    &:before {
+        left: 30px;
+    }
+
+    @include media(tablet) {
+        margin-top: $gutter;
+        margin-bottom: $gutter;
+    }
+}
+
+.sar-requirements__column {
+    & > :first-child {
+        margin-top: 0;
+    }
+
+    & > :last-child {
+        margin-bottom: 0;
+    }
+
+    & + .sar-requirements__column {
+        margin-top: 2em;
+    }
+
+    @include media(tablet) {
+        float: left;
+
+        & + .sar-requirements__column {
+            margin-top: 0;
+            margin-left: 2em;
+        }
     }
 }
 
@@ -75,6 +115,11 @@ body.sar-proof {
                 margin-top: $gutter;
             }
         }
+    }
+
+    .sar-requirements {
+        margin-bottom: 1em;
+        padding-right: 0;
     }
 }
 
