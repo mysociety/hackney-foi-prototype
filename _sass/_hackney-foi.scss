@@ -14,8 +14,21 @@
         margin-bottom: 0.5em;
     }
 
-    p {
+    .excerpt {
         color: $text-colour;
+        margin-bottom: 0.5em;
+    }
+
+    .link-fake {
+        &:after {
+            content: '';
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            background: transparent url(../images/link-external.png) 0 0 no-repeat;
+            background-image: url(../images/link-external.svg), none;
+            margin-left: 0.3em;
+        }
     }
 
     & > :first-child {
