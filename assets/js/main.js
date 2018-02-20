@@ -132,7 +132,7 @@ $(function(){
     });
 
     // Pre-fill sar-subject-name with sar-requestor-name, if sar-subject==='myself'
-    $('input[name="sar-subject"]').on('change', function(){
+    $('input[name="sar-subject-myself"]').on('change', function(){
         if ( $('#sar-subject-myself').is(':checked') ) {
             var currentSession = window.sessions.current() || window.sessions.create(true);
             if ( isset(currentSession['sar-requestor-name']) ) {
@@ -145,7 +145,7 @@ $(function(){
     // Hide the multi-person stuff if sar-subject==='myself'
     if ( $('body').is('.sar-proof-1') ) {
         var currentSession = window.sessions.current() || window.sessions.create(true);
-        if ( isset(currentSession['sar-subject']) && currentSession['sar-subject'] == 'myself' ) {
+        if ( isset(currentSession['sar-subject-myself']) && ! isset(currentSession['sar-subject-others']) ) {
             $('h1').text('Tell us more about yourself');
             $('label[for="sar-subject-other-names"]').text('Other names you have used');
             $('.sar-person--add').hide();

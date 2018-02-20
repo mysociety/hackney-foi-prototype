@@ -4,25 +4,26 @@ title: "Your request has been sent"
 bodyclass: "sar sar-complete"
 ---
 
+<div class="govuk-box-highlight">
+    <h1 class="heading-xlarge">
+        Your request has been&nbsp;sent
+    </h1>
+    <p class="font-large">
+        Your reference number is <br>
+        <strong class="bold">HA-00001-001</strong>
+    </p>
+    <p class="font-medium">
+        We have emailed a copy to
+        <strong class="bold js-session-store" id="sar-requestor-email">you</strong>
+    </p>
+</div>
+
+<h2 class="heading-medium">What happens next?</h2>
+
+<div class="js-sar-complete-proof-reminder"></div>
+
 <div class="grid-row">
     <div class="column-two-thirds">
-        <div class="govuk-box-highlight">
-            <h1 class="heading-xlarge">
-                Your request has been&nbsp;sent
-            </h1>
-            <p class="font-large">
-                Your reference number is <br>
-                <strong class="bold">HA-00001-001</strong>
-            </p>
-        </div>
-
-        <p>We have sent you a confirmation email.</p>
-
-        <div class="js-sar-complete-proof-reminder"></div>
-
-        <h2 class="heading-medium">
-            What happens next?
-        </h2>
 
         <p class="text">
             Your request will be reviewed by our team and a member of staff will be in touch if they have any questions or need any additional information.
@@ -36,7 +37,15 @@ bodyclass: "sar sar-complete"
             Particularly complex requests that involve a large amount of information can be extended up to 3 months.
         </p>
 
-        <a class="button button-secondary" href="#">Print this page</a>
+    </div>
+    <div class="column-one-third">
+        <div class="data">
+          <span class="data-item bold-xxlarge">80%</span>
+          <span class="data-item bold-xsmall">SAR requests currently being handled&nbsp;within 40 calendar days</span>
+        </div>
     </div>
 </div>
 
+<p>
+    <a class="button button-secondary" href="#">Print this page</a>
+</p>
