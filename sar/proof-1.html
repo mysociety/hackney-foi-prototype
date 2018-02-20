@@ -4,54 +4,7 @@ title: "Who are you requesting information about?"
 bodyclass: "sar sar-proof-1"
 ---
 
-<h1 class="heading-xlarge">Who are you requesting information about?</h1>
-
-<form class="sar-person">
-    <header>
-        <h2 class="heading-large" data-text-reflects-input="#sar-subject-name">Person #1</h2>
-    </header>
-
-    <div class="grid-row">
-        <div class="column-two-thirds">
-
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-name">Full name</label>
-                <input type="text" class="form-control form-control-3-4 js-session-store" name="sar-subject-name" id="sar-subject-name" data-aside="#tips">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-other-names">Other names this person has used</label>
-                <input type="email" class="form-control form-control-3-4 js-session-store" name="sar-subject-other-names" id="sar-subject-other-names">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-address">Address</label>
-                <textarea rows="5" class="form-control form-control-3-4 js-session-store" name="sar-subject-address" id="sar-subject-address"></textarea>
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-dob">Date of birth</label>
-                <input type="date" class="form-control form-control-3-4 js-session-store" name="sar-subject-dob" id="sar-subject-dob">
-            </div>
-            <!-- TODO: Show this if sar-subject-dob is less than 18 years ago -->
-            <div class="form-group multiple-choice js-hidden" style="float: none;" data-show-if-younger-than-18="#sar-subject-dob">
-                <input type="checkbox" class="form-control js-session-store" name="sar-parental-responsibility" id="sar-parental-responsibility">
-                <label class="form-label" for="sar-parental-responsibility">I have parental responsibility for this person</label>
-            </div>
-
-        </div>
-        <div class="column-one-third">
-
-            <aside id="tips" class="form-aside">
-                <ul class="list font-xsmall">
-                    <li>We need this information to find the specified person in our records.</li>
-                    <li>We’ll only use these details for the handling of your request.</li>
-                    <li><a href="#">Read more in our privacy statement.</a></li>
-                </ul>
-            </aside>
-
-        </div>
-    </div>
-</form>
-
-<a class="sar-person sar-person--add" href="#">Add another person</a>
+<div class="js-sar-subject-detail-builder"></div>
 
 <p class="cta-section">
     <a class="button button-secondary" href="saved.html">Save and continue later</a>

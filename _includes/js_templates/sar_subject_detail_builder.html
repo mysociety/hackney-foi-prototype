@@ -1,0 +1,13 @@
+<h1 class="heading-xlarge">
+  [[if currentSession['sar-subject'] == 'myself']]
+    Tell us a little more about yourself
+  [[else]]
+    Who are you requesting information about?
+  [[/if]]
+</h1>
+
+[[include tmpl="#sarSubjectDetail"/]]
+
+[[if currentSession['sar-subject'] != 'myself']]
+<a class="sar-person sar-person--add js-add-another-sar-subject" href="#">Add another person</a>
+[[/if]]

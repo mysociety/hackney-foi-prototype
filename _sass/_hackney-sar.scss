@@ -6,6 +6,7 @@ body.sar-proof {
     padding: 1em;
     margin-bottom: 2em;
     background-color: $light-blue-10;
+    counter-increment: sar-people;
 
     @include media(tablet) {
         padding: 1.5em;
@@ -17,7 +18,6 @@ body.sar-proof {
         &:before {
             @extend .circle;
             @extend .circle-step-large;
-            counter-increment: sar-people;
             content: counter(sar-people);
             vertical-align: 0.3em;
             margin-right: 1em;

@@ -1,35 +1,36 @@
 // Default JsRender delimiters `{{…}}` conflict with Jekyll/Liquid.
 $.views.settings.delimiters("[[", "]]");
 
-var refreshSessionList = function refreshSessionList($list){
+var refreshSessionList = function refreshSessionList(){
+    var listElement = this;
     var allSessions = window.sessions.all();
     var template = $.templates("#sessionList");
 
-    $list.html( template.render({allSessions: allSessions}) );
+    $(listElement).html( template.render({allSessions: allSessions}) );
 
-    $('.js-resume-session', $list).on('click', function(){
+    $('.js-resume-session', $(listElement)).on('click', function(){
         window.sessions.resume( $(this).attr('data-session-id') );
-        refreshSessionList($list);
+        refreshSessionList.call(listElement);
     });
 
     $('.js-deactivate-session').on('click', function(){
         window.sessions.deactivate( $(this).attr('data-session-id') );
-        refreshSessionList($list);
+        refreshSessionList.call(listElement);
     });
 
     $('.js-destroy-session').on('click', function(){
         window.sessions.delete( $(this).attr('data-session-id') );
-        refreshSessionList($list);
+        refreshSessionList.call(listElement);
     });
 
-    $('.js-new-session', $list).on('click', function(){
+    $('.js-new-session', $(listElement)).on('click', function(){
         window.sessions.create(true);
-        refreshSessionList($list);
+        refreshSessionList.call(listElement);
     });
 
     $('.js-destroy-sessions').on('click', function(){
         window.sessions.deleteAll();
-        refreshSessionList($list);
+        refreshSessionList.call(listElement);
     });
 };
 
@@ -70,90 +71,203 @@ var ageInYears = function ageInYears(birthDate, ageAtDate){
     return ageAtDate.getFullYear() - birthDate.getFullYear() - nextyear;
 }
 
-$(function(){
-    $('[data-aside]').each(function(){
-        var $control = $(this);
-        var $aside = $( $(this).attr('data-aside') );
+var setUpFadingAsideHints = function setUpFadingAsideHints() {
+    var $control = $(this);
+    var $aside = $( $(this).attr('data-aside') );
 
-        $control.on('focus', function(){
-            $aside.addClass('form-aside--active');
-        });
+    $control.on('focus', function(){
+        $aside.addClass('form-aside--active');
     });
+}
 
-    $('[data-inputs-must-match]').on('change', function(){
-        var $el = $(this);
-        var $twin = $( $el.attr('data-inputs-must-match') );
-        var $formGroup = $el.parents('.form-group');
+var setUpTextThatReflectsInput = function setUpTextThatReflectsInput() {
+    var $el = $(this);
+    var originalText = $el.text();
+    var $input = $( $el.attr('data-text-reflects-input') );
 
-        if ( $el.val() == $twin.val() ) {
-            $formGroup.removeClass('form-group-error');
-            $formGroup.find('.error-message').remove();
-            $formGroup.find('.form-control-error').removeClass('form-control-error');
+    $input.on('change', function(){
+        var inputVal = $.trim( $input.val() );
+        if ( inputVal === '' ){
+            $el.text(originalText);
         } else {
-            var $error = $('<span role="alert">').addClass('error-message');
-            $error.text( $el.attr('data-inputs-mismatch-hint') );
-            $error.insertBefore( $el );
-            $formGroup.addClass('form-group-error');
-            $formGroup.find('.form-control').addClass('form-control-error');
+            $el.text(inputVal);
         }
     });
+}
 
-    $('[data-text-reflects-input]').each(function(){
-        var $el = $(this);
-        var originalText = $el.text();
-        var $input = $( $el.attr('data-text-reflects-input') );
+var setUpShowIfYoungerThan18 = function setUpShowIfYoungerThan18() {
+    var $el = $(this);
+    var $input = $( $el.attr('data-show-if-younger-than-18') );
 
-        $input.on('change', function(){
-            var inputVal = $.trim( $input.val() );
-            if ( inputVal === '' ){
-                $el.text(originalText);
+    $input.on('change', function(){
+        var inputVal = $.trim( $input.val() );
+        if ( inputVal === '' ){
+            $el.addClass('js-hidden');
+        } else {
+            if ( ageInYears($input.val()) < 18 ) {
+                $el.removeClass('js-hidden');
             } else {
-                $el.text(inputVal);
-            }
-        });
-    });
-
-    $('[data-show-if-younger-than-18]').each(function(){
-        var $el = $(this);
-        var $input = $( $el.attr('data-show-if-younger-than-18') );
-
-        $input.on('change', function(){
-            var inputVal = $.trim( $input.val() );
-            if ( inputVal === '' ){
                 $el.addClass('js-hidden');
-            } else {
-                if ( ageInYears($input.val()) < 18 ) {
-                    $el.removeClass('js-hidden');
-                } else {
-                    $el.addClass('js-hidden');
-                }
-            }
-        });
-    });
-
-    // Pre-fill sar-subject-name with sar-requestor-name, if sar-subject==='myself'
-    $('input[name="sar-subject"]').on('change', function(){
-        if ( $('#sar-subject-myself').is(':checked') ) {
-            var currentSession = window.sessions.current() || window.sessions.create(true);
-            if ( isset(currentSession['sar-requestor-name']) ) {
-                currentSession['sar-subject-name'] = currentSession['sar-requestor-name'];
-                window.sessions.save(currentSession);
             }
         }
     });
+}
 
-    // Hide the multi-person stuff if sar-subject==='myself'
-    if ( $('body').is('.sar-proof-1') ) {
+var validateMatchingInputs = function validateMatchingInputs() {
+    var $el = $(this);
+    var $twin = $( $el.attr('data-inputs-must-match') );
+    var $formGroup = $el.parents('.form-group');
+
+    if ( $el.val() == $twin.val() ) {
+        $formGroup.removeClass('form-group-error');
+        $formGroup.find('.error-message').remove();
+        $formGroup.find('.form-control-error').removeClass('form-control-error');
+    } else {
+        var $error = $('<span role="alert">').addClass('error-message');
+        $error.text( $el.attr('data-inputs-mismatch-hint') );
+        $error.insertBefore( $el );
+        $formGroup.addClass('form-group-error');
+        $formGroup.find('.form-control').addClass('form-control-error');
+    }
+}
+
+var populateSarProofReminder = function populateSarProofReminder() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var $container = $(this);
+    var proofDelivery = currentSession['sar-proof-delivery-method'];
+    if ( isset(proofDelivery) && proofDelivery !== 'upload' ) {
+        var template = $.templates("#sarCompleteProofReminder");
+        $container.show().html( template.render({
+            currentSession: currentSession,
+            submitted: $('body').is('.sar-complete')
+        }) );
+    } else {
+        $container.hide();
+    }
+}
+
+// Run this on subject.html to pre-set the first subject's "name"
+// field to the requestor's name, if we know they are only making a
+// request about themselves.
+var preFillSarSubjectNameIfMyself = function preFillSarSubjectNameIfMyself() {
+    if ( $('#sar-subject-myself').is(':checked') ) {
         var currentSession = window.sessions.current() || window.sessions.create(true);
-        if ( isset(currentSession['sar-subject']) && currentSession['sar-subject'] == 'myself' ) {
-            $('h1').text('Tell us more about yourself');
-            $('label[for="sar-subject-other-names"]').text('Other names you have used');
-            $('.sar-person--add').hide();
+        if ( isset(currentSession['sar-requestor-name']) ) {
+            currentSession['sar-subject-name'] = currentSession['sar-requestor-name'];
+            window.sessions.save(currentSession);
         }
-    };
+    }
+}
 
+var setUpSarSubjectDetailBuilder = function setUpSarSubjectDetailBuilder() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var $container = $(this);
+    var template = $.templates("#sarSubjectDetailBuilder");
+
+    $container.html( template.render({
+        currentSession: currentSession
+    }) );
+
+    $('.js-add-another-sar-subject', $container).on('click', function(e){
+        e.preventDefault();
+
+        var $button = $(this);
+        var template = $.templates("#sarSubjectDetail");
+        var $form = $( template.render({
+            currentSession: currentSession
+        }) );
+
+        $form.insertBefore($button);
+        $('[data-aside]', $form).each(setUpFadingAsideHints);
+        $('[data-text-reflects-input]', $form).each(setUpTextThatReflectsInput);
+        $('[data-show-if-younger-than-18]', $form).each(setUpShowIfYoungerThan18);
+    });
+
+    $('[data-aside]', $container).each(setUpFadingAsideHints);
+    $('[data-text-reflects-input]', $container).each(setUpTextThatReflectsInput);
+    $('[data-show-if-younger-than-18]', $container).each(setUpShowIfYoungerThan18);
+}
+
+var populateSessionStoreElement = function populateSessionStoreElement() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var $el = $(this);
+    var name = $el.attr('name') || $el.attr('id'); // non-form-elements will have an id rather than a name
+
+    if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
+        var bool = isset(currentSession[name]) && currentSession[name] == $el.val();
+        $el.prop('checked', bool);
+
+    } else if ( $el.is('select[multiple]') ) {
+        $el.children('option').each(function(){
+            var bool = isset(currentSession[name]) && currentSession[name].indexOf($(this).attr('value') > -1);
+            $(this).prop('selected', bool);
+        });
+
+    } else if ( $el.is('input, textarea, select') ) {
+        $el.val( currentSession[name] ? currentSession[name] : null );
+
+    } else {
+        $el.text( currentSession[name] ? currentSession[name] : '' );
+
+    }
+
+    // We have changed the contents of the element, so we should be nice
+    // citizens and trigger a `change` event, in case any other `change`
+    // listeners have been attached to this element.
+    // We're reading directly out of the session store, however, so it
+    // would be wasteful to trigger *our own* sessions.save() listener.
+    // We tell our `change` listener to ignore the event by passing a
+    // custom argument of "ignore", which it knows to look out for.
+    $el.trigger('change', ['ignore']);
+}
+
+var saveSessionStoreInputValue = function saveSessionStoreInputValue(e, customArgument) {
+    // If customArgument === 'ignore' then this event has been generated
+    // by our own $('.js-session-store').each() callback, and we know the
+    // element's contents will be fresh out of the store, so we don't need
+    // to waste time saving them again.
+    if ( customArgument === 'ignore' ) {
+        return;
+    }
+
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var $el = $(this);
+    var name = $el.attr('name');
+
+    if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
+        if ( $el.prop('checked') ) {
+            currentSession[name] = $el.val();
+        } else if ( isset(currentSession[name]) ) {
+            delete currentSession[name];
+        }
+
+    } else if ( $el.is('input, textarea, select') ) {
+        var val = $el.val();
+
+        if ( val ) {
+            currentSession[name] = val;
+        } else if ( isset(currentSession[name]) ) {
+            delete currentSession[name];
+        }
+    }
+
+    window.sessions.save(currentSession);
+}
+
+$(function(){
+    $('[data-aside]').each(setUpFadingAsideHints);
+
+    $('[data-text-reflects-input]').each(setUpTextThatReflectsInput);
+
+    $(document).on('change', '[data-inputs-must-match]', validateMatchingInputs);
+
+    $('[data-show-if-younger-than-18]').each(setUpShowIfYoungerThan18);
+
+    $(document).on('change', 'input[name="sar-subject"]', preFillSarSubjectNameIfMyself);
+
+    // TODO: Refactor this out.
     // Skip proof-3 (upload) page if another provision method is selected.
-    $('input[name="sar-proof-delivery-method"]').on('change', function(){
+    $(document).on('change', 'input[name="sar-proof-delivery-method"]', function(){
         var $nextButton = $('.cta-section .button:last-child');
         if ( $('#sar-proof-delivery-method-upload-now').is(':checked') ) {
             $nextButton.attr('href', 'proof-3.html');
@@ -162,88 +276,13 @@ $(function(){
         }
     });
 
-    $('.js-sar-complete-proof-reminder').each(function(){
-        var currentSession = window.sessions.current() || window.sessions.create(true);
-        var $container = $(this);
-        var proofDelivery = currentSession['sar-proof-delivery-method'];
-        if ( isset(proofDelivery) && proofDelivery !== 'upload' ) {
-            var template = $.templates("#sarCompleteProofReminder");
-            $container.show().html( template.render({
-                currentSession: currentSession,
-                submitted: $('body').is('.sar-complete')
-            }) );
-        } else {
-            $container.hide();
-        }
-    });
+    $('.js-sar-complete-proof-reminder').each(populateSarProofReminder);
 
-    $('.js-session-list').each(function(){
-        refreshSessionList($(this));
-    });
+    $('.js-sar-subject-detail-builder').each(setUpSarSubjectDetailBuilder);
 
-    $('.js-session-store').each(function(){
-        var currentSession = window.sessions.current() || window.sessions.create(true);
-        var $el = $(this);
-        var name = $el.attr('name') || $el.attr('id'); // non-form-elements will have an id rather than a name
+    $('.js-session-list').each(refreshSessionList);
 
-        if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
-            var bool = isset(currentSession[name]) && currentSession[name] == $el.val();
-            $el.prop('checked', bool);
+    $('.js-session-store').each(populateSessionStoreElement);
 
-        } else if ( $el.is('select[multiple]') ) {
-            $el.children('option').each(function(){
-                var bool = isset(currentSession[name]) && currentSession[name].indexOf($(this).attr('value') > -1);
-                $(this).prop('selected', bool);
-            });
-
-        } else if ( $el.is('input, textarea, select') ) {
-            $el.val( currentSession[name] ? currentSession[name] : null );
-
-        } else {
-            $el.text( currentSession[name] ? currentSession[name] : '' );
-
-        }
-
-        // We have changed the contents of the element, so we should be nice
-        // citizens and trigger a `change` event, in case any other `change`
-        // listeners have been attached to this element.
-        // We're reading directly out of the session store, however, so it
-        // would be wasteful to trigger *our own* sessions.save() listener.
-        // We tell our `change` listener to ignore the event by passing a
-        // custom argument of "ignore", which it knows to look out for.
-        $el.trigger('change', ['ignore']);
-    });
-
-    $('.js-session-store').on('change', function(e, customArgument){
-        // If customArgument === 'ignore' then this event has been generated
-        // by our own $('.js-session-store').each() callback, and we know the
-        // element's contents will be fresh out of the store, so we don't need
-        // to waste time saving them again.
-        if ( customArgument === 'ignore' ) {
-            return;
-        }
-
-        var currentSession = window.sessions.current() || window.sessions.create(true);
-        var $el = $(this);
-        var name = $el.attr('name');
-
-        if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
-            if ( $el.prop('checked') ) {
-                currentSession[name] = $el.val();
-            } else if ( isset(currentSession[name]) ) {
-                delete currentSession[name];
-            }
-
-        } else if ( $el.is('input, textarea, select') ) {
-            var val = $el.val();
-
-            if ( val ) {
-                currentSession[name] = val;
-            } else if ( isset(currentSession[name]) ) {
-                delete currentSession[name];
-            }
-        }
-
-        window.sessions.save(currentSession);
-    });
+    $(document).on('change', '.js-session-store', saveSessionStoreInputValue);
 });
