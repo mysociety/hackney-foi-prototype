@@ -223,13 +223,28 @@ var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
 var setUpSarDocumentUpload = function setUpSarDocumentUpload() {
     var currentSession = window.sessions.current() || window.sessions.create(true);
     var subjects = getSubjects(currentSession);
+    var template = $.templates("#sarSubjectDocumentUpload");
     var $container = $(this);
 
+    var createPersonForm = function createPersonForm(subjectIndex, subject) {
+        var $personForm = $( template.render({
+            subject: subject,
+            i: subjectIndex,
+            requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
+            requiresLetterOfAuthority: subjectRequiresLetterOfAuthority(subject)
+        }) );
+        return $personForm;
+    }
+
+    $container.empty();
+
     if ( subjects.length ) {
-        console.log('You have', subjects.length, 'subjects');
-        console.log('…but do any of them require documents to be uploaded right now?');
+        $.each(subjects, function(subjectIndex, subject){
+            var $personForm = createPersonForm(subjectIndex, subject);
+            $personForm.appendTo($container);
+        });
     } else {
-        console.log('You have no subjects. Redirecting to ./proof-1.html…');
+        window.location.href = 'proof-1.html';
     }
 }
 
@@ -362,18 +377,6 @@ $(function(){
 
     // setUpTextReflectsInput();
     // setUpShowIfYoungerThan18();
-
-    // Skip proof-3 (upload) page if another provision method is selected.
-    // TODO: This should be built into setUpSarPersonBuilder rather than
-    // being performed on page load here.
-    // $('input[name="sar-proof-delivery-method"]').on('change', function(){
-    //     var $nextButton = $('.cta-section .button:last-child');
-    //     if ( $('#sar-proof-delivery-method-upload-now').is(':checked') ) {
-    //         $nextButton.attr('href', 'proof-3.html');
-    //     } else {
-    //         $nextButton.attr('href', 'type.html');
-    //     }
-    // });
 
     $('.js-sar-complete-proof-reminder').each(function(){
         var currentSession = window.sessions.current() || window.sessions.create(true);

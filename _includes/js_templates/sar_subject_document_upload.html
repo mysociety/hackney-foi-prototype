@@ -1,0 +1,47 @@
+<form class="sar-person">
+    <header>
+        <h2 class="heading-large">[[: subject['subject-name'] ]]</h2>
+    </header>
+
+  [[if subject['document-delivery-method'] === 'upload-now' ]]
+    <p>We’re happy to accept scans or even photographs taken on mobile phones, as long as the details are clearly legible.</p>
+
+    <div class="form-group">
+        <label class="form-label" for="ni-number">
+            Proof of name
+            <span class="form-hint">
+                Driving licence, passport, or birth certificate
+            </span>
+        </label>
+        <input type="file" name="sar-proof-of-name" id="sar-proof-of-name">
+    </div>
+
+  [[if requiresProofOfAddress]]
+    <div class="form-group">
+        <label class="form-label" for="ni-number">
+            Proof of address
+            <span class="form-hint">
+                Utility bill, bank statement, or council tax bill
+            </span>
+        </label>
+        <input type="file" name="sar-proof-of-address" id="sar-proof-of-address">
+    </div>
+  [[/if]]
+
+  [[if requiresLetterOfAuthority]]
+    <div class="form-group">
+        <label class="form-label" for="ni-number">
+            Letter of Authority
+        </label>
+        <input type="file" name="sar-letter-of-authority" id="sar-letter-of-authority">
+    </div>
+  [[/if]]
+
+  [[else subject['document-delivery-method'] === 'upload-later' ]]
+    <p>You have opted to upload documents for this person at a later date.</p>
+  [[else subject['document-delivery-method'] === 'post' ]]
+    <p>You have opted to provide documents for this person by post.</p>
+  [[else subject['document-delivery-method'] === 'service-centre' ]]
+    <p>You have opted to bring documents for this person to a Hackney Council service centre.</p>
+  [[/if]]
+</form>
