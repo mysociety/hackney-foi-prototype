@@ -190,12 +190,33 @@ var setUpSarPersonBuilder = function setUpSarPersonBuilder(){
 var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
     var currentSession = window.sessions.current() || window.sessions.create(true);
     var subjects = getSubjects(currentSession);
+    var template = $.templates("#sarSubjectDocumentOptions");
     var $container = $(this);
 
+    var createPersonForm = function createPersonForm(subjectIndex, subject) {
+        var $personForm = $( template.render({
+            subject: subject,
+            i: subjectIndex,
+            requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
+            requiresLetterOfAuthority: subjectRequiresLetterOfAuthority(subject)
+        }) );
+
+        $personForm.on('change', '.form-control', function(){
+            saveSarSubjectField($(this), subjectIndex);
+        });
+
+        return $personForm;
+    }
+
+    $container.empty();
+
     if ( subjects.length ) {
-        console.log('You have', subjects.length, 'subjects');
+        $.each(subjects, function(subjectIndex, subject){
+            var $personForm = createPersonForm(subjectIndex, subject);
+            $personForm.appendTo($container);
+        });
     } else {
-        console.log('You have no subjects. Redirecting to ./proof-1.html…');
+        window.location.href = 'proof-1.html';
     }
 }
 
@@ -263,6 +284,30 @@ var setUpShowIfYoungerThan18 = function setUpShowIfYoungerThan18($context, force
     });
 }
 
+var subjectRequiresProofOfAddress = function subjectRequiresProofOfAddress(subject) {
+    if ( isset(subject['subject-dob']) && ageInYears(subject['subject-dob']) > 12 ) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+var subjectRequiresLetterOfAuthority = function subjectRequiresLetterOfAuthority(subject) {
+    if ( isset(subject['is-requestor']) ) {
+        return false;
+    } else if (
+        isset(subject['subject-dob']) &&
+        ageInYears(subject['subject-dob']) < 13 &&
+        isset(subject['requestor-has-parental-responsibility'])
+    ) {
+        return false;
+    } else if ( ! isset(subject['subject-dob']) ) {
+        return false;
+    } else {
+        return true;
+    }
+}
+
 $(function(){
     $('[data-aside]').each(function(){
         var $control = $(this);
@@ -296,6 +341,24 @@ $(function(){
     $('.js-sar-document-options').each(setUpSarDocumentOptions);
 
     $('.js-sar-document-upload').each(setUpSarDocumentUpload);
+
+    $('[data-path-if-nothing-to-upload]').each(function(){
+        var $button = $(this);
+
+        $button.on('click', function(e){
+            e.preventDefault();
+            var path = $button.attr('data-path-if-nothing-to-upload');
+
+            $('.sar-person input[name="document-delivery-method"][value="upload-now"]').each(function(){
+                if ( $(this).is(':checked') ) {
+                    path = $button.attr('href');
+                    return false;
+                }
+            });
+
+            window.location.href = path;
+        });
+    });
 
     // setUpTextReflectsInput();
     // setUpShowIfYoungerThan18();

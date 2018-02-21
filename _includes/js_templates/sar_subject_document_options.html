@@ -1,0 +1,60 @@
+<form class="sar-person">
+    <header>
+        <h2 class="heading-large">[[: subject['subject-name'] ]]</h2>
+    </header>
+
+    <div class="sar-requirements">
+        <div class="sar-requirements__column">
+            <p>For this person, we need one of:</p>
+            <ul class="list-bullet body-text">
+                <li>Driving licence</li>
+                <li>Passport</li>
+                <li>Birth certificate</li>
+            </ul>
+        </div>
+      [[if requiresProofOfAddress]]
+        <div class="sar-requirements__column">
+            <p>And one of:</p>
+            <ul class="list-bullet body-text">
+                <li>Utility bill</li>
+                <li>Bank statement</li>
+                <li>Council tax bill</li>
+            </ul>
+        </div>
+      [[/if]]
+      [[if requiresLetterOfAuthority]]
+        <div class="sar-requirements__column">
+            <p>And also:</p>
+            <ul class="list-bullet body-text">
+                <li>Letter of Authority</li>
+            </ul>
+        </div>
+      [[/if]]
+    </div>
+
+    <fieldset>
+
+        <legend class="heading-small" style="margin-bottom: 1em;">How would you like to give us these documents?</legend>
+
+        <div class="multiple-choice">
+            <input type="radio" [[if subject['document-delivery-method'] === 'upload-now' ]]checked[[/if]] class="form-control" name="document-delivery-method" id="sar-subject-[[: i ]]-document-delivery-method-upload-now" value="upload-now">
+            <label for="sar-subject-[[: i ]]-document-delivery-method-upload-now">Upload scans or photographs now</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" [[if subject['document-delivery-method'] === 'upload-later' ]]checked[[/if]] class="form-control" name="document-delivery-method" id="sar-subject-[[: i ]]-document-delivery-method-upload-later" value="upload-later">
+            <label for="sar-subject-[[: i ]]-document-delivery-method-upload-later">Upload later</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" [[if subject['document-delivery-method'] === 'post' ]]checked[[/if]] class="form-control" name="document-delivery-method" id="sar-subject-[[: i ]]-document-delivery-method-post" value="post">
+            <label for="sar-subject-[[: i ]]-document-delivery-method-post">Send copies by post</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" [[if subject['document-delivery-method'] === 'service-centre' ]]checked[[/if]] class="form-control" name="document-delivery-method" id="sar-subject-[[: i ]]-document-delivery-method-service-centre" value="service-centre">
+            <label for="sar-subject-[[: i ]]-document-delivery-method-service-centre">Bring to a council service centre</label>
+        </div>
+
+    </fieldset>
+</form>
