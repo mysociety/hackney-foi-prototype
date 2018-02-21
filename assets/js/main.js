@@ -70,6 +70,78 @@ var ageInYears = function ageInYears(birthDate, ageAtDate){
     return ageAtDate.getFullYear() - birthDate.getFullYear() - nextyear;
 }
 
+// A utility function for extracting a list of subjects from the
+// given state object. If no subjects are stored in the state object,
+// return an empty list.
+var getSubjects = function getSubjects(stateObject) {
+    var subjects = [];
+    if ( typeof stateObject['sar-subjects'] === 'object' ) {
+        if ( stateObject['sar-subjects'].length > 0 ) {
+            subjects = stateObject['sar-subjects'];
+        }
+    }
+    return subjects;
+}
+
+var setUpSarPersonBuilder = function setUpSarPersonBuilder(){
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var subjects = getSubjects(currentSession);
+    var template = $.templates("#sarSubjectDetails");
+    var $container = $(this);
+
+    $container.empty();
+
+    if ( subjects.length ) {
+        $.each(subjects, function(i, subject){
+            $container.append( template.render({
+                subject: subject,
+                i: i
+            }) );
+        });
+    } else {
+        $container.append( template.render({
+            subject: {},
+            i: 0
+        }) );
+    }
+
+    var $addButton = $('<button>')
+        .addClass('sar-person sar-person--add')
+        .text('Add another person')
+        .on('click', function(){
+            $( template.render({
+                subject: {},
+                i: $addButton.prevAll('.sar-person').length
+            }) ).insertBefore($addButton);
+        })
+        .appendTo($container);
+}
+
+var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var subjects = getSubjects(currentSession);
+    var $container = $(this);
+
+    if ( subjects.length ) {
+        console.log('You have', subjects.length, 'subjects');
+    } else {
+        console.log('You have no subjects. Redirecting to ./proof-1.html…');
+    }
+}
+
+var setUpSarDocumentUpload = function setUpSarDocumentUpload() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var subjects = getSubjects(currentSession);
+    var $container = $(this);
+
+    if ( subjects.length ) {
+        console.log('You have', subjects.length, 'subjects');
+        console.log('…but do any of them require documents to be uploaded right now?');
+    } else {
+        console.log('You have no subjects. Redirecting to ./proof-1.html…');
+    }
+}
+
 $(function(){
     $('[data-aside]').each(function(){
         var $control = $(this);
@@ -98,69 +170,85 @@ $(function(){
         }
     });
 
-    $('[data-text-reflects-input]').each(function(){
-        var $el = $(this);
-        var originalText = $el.text();
-        var $input = $( $el.attr('data-text-reflects-input') );
+    $('.js-sar-subject-details').each(setUpSarPersonBuilder);
 
-        $input.on('change', function(){
-            var inputVal = $.trim( $input.val() );
-            if ( inputVal === '' ){
-                $el.text(originalText);
-            } else {
-                $el.text(inputVal);
-            }
-        });
-    });
+    $('.js-sar-document-options').each(setUpSarDocumentOptions);
 
-    $('[data-show-if-younger-than-18]').each(function(){
-        var $el = $(this);
-        var $input = $( $el.attr('data-show-if-younger-than-18') );
+    $('.js-sar-document-upload').each(setUpSarDocumentUpload);
 
-        $input.on('change', function(){
-            var inputVal = $.trim( $input.val() );
-            if ( inputVal === '' ){
-                $el.addClass('js-hidden');
-            } else {
-                if ( ageInYears($input.val()) < 18 ) {
-                    $el.removeClass('js-hidden');
-                } else {
-                    $el.addClass('js-hidden');
-                }
-            }
-        });
-    });
+    // TODO: The subject name inputs are generated after page load,
+    // by setUpSarPersonBuilder. So this selector will never match
+    // any elements (at page load).
+    // $('[data-text-reflects-input]').each(function(){
+    //     var $el = $(this);
+    //     var originalText = $el.text();
+    //     var $input = $( $el.attr('data-text-reflects-input') );
+    //
+    //     $input.on('change', function(){
+    //         var inputVal = $.trim( $input.val() );
+    //         if ( inputVal === '' ){
+    //             $el.text(originalText);
+    //         } else {
+    //             $el.text(inputVal);
+    //         }
+    //     });
+    // });
 
-    // Pre-fill sar-subject-name with sar-requestor-name, if sar-subject==='myself'
-    $('input[name="sar-subject-myself"]').on('change', function(){
-        if ( $('#sar-subject-myself').is(':checked') ) {
-            var currentSession = window.sessions.current() || window.sessions.create(true);
-            if ( isset(currentSession['sar-requestor-name']) ) {
-                currentSession['sar-subject-name'] = currentSession['sar-requestor-name'];
-                window.sessions.save(currentSession);
-            }
-        }
-    });
+    // TODO: The "younger than 18" date input is generated after
+    // page load, by setUpSarPersonBuilder. So this selector will
+    // never match any elements (at page load).
+    // $('[data-show-if-younger-than-18]').each(function(){
+    //     var $el = $(this);
+    //     var $input = $( $el.attr('data-show-if-younger-than-18') );
+    //
+    //     $input.on('change', function(){
+    //         var inputVal = $.trim( $input.val() );
+    //         if ( inputVal === '' ){
+    //             $el.addClass('js-hidden');
+    //         } else {
+    //             if ( ageInYears($input.val()) < 18 ) {
+    //                 $el.removeClass('js-hidden');
+    //             } else {
+    //                 $el.addClass('js-hidden');
+    //             }
+    //         }
+    //     });
+    // });
 
-    // Hide the multi-person stuff if sar-subject==='myself'
-    if ( $('body').is('.sar-proof-1') ) {
-        var currentSession = window.sessions.current() || window.sessions.create(true);
-        if ( isset(currentSession['sar-subject-myself']) && ! isset(currentSession['sar-subject-others']) ) {
-            $('h1').text('Tell us more about yourself');
-            $('label[for="sar-subject-other-names"]').text('Other names you have used');
-            $('.sar-person--add').hide();
-        }
-    };
+    // TODO: We’re changing how sar subjects are stored in the session
+    // so currentSession['sar-requestor-name'] here will need to change.
+    // $('input[name="sar-subject-myself"]').on('change', function(){
+    //     if ( $('#sar-subject-myself').is(':checked') ) {
+    //         var currentSession = window.sessions.current() || window.sessions.create(true);
+    //         if ( isset(currentSession['sar-requestor-name']) ) {
+    //             currentSession['sar-subject-name'] = currentSession['sar-requestor-name'];
+    //             window.sessions.save(currentSession);
+    //         }
+    //     }
+    // });
+
+    // TODO: This should be built into setUpSarPersonBuilder rather than
+    // being performed on page load here.
+    // if ( $('body').is('.sar-proof-1') ) {
+    //     var currentSession = window.sessions.current() || window.sessions.create(true);
+    //     if ( isset(currentSession['sar-subject-myself']) && ! isset(currentSession['sar-subject-others']) ) {
+    //         $('h1').text('Tell us more about yourself');
+    //         $('label[for="sar-subject-other-names"]').text('Other names you have used');
+    //         $('.sar-person--add').hide();
+    //     }
+    // };
 
     // Skip proof-3 (upload) page if another provision method is selected.
-    $('input[name="sar-proof-delivery-method"]').on('change', function(){
-        var $nextButton = $('.cta-section .button:last-child');
-        if ( $('#sar-proof-delivery-method-upload-now').is(':checked') ) {
-            $nextButton.attr('href', 'proof-3.html');
-        } else {
-            $nextButton.attr('href', 'type.html');
-        }
-    });
+    // TODO: This should be built into setUpSarPersonBuilder rather than
+    // being performed on page load here.
+    // $('input[name="sar-proof-delivery-method"]').on('change', function(){
+    //     var $nextButton = $('.cta-section .button:last-child');
+    //     if ( $('#sar-proof-delivery-method-upload-now').is(':checked') ) {
+    //         $nextButton.attr('href', 'proof-3.html');
+    //     } else {
+    //         $nextButton.attr('href', 'type.html');
+    //     }
+    // });
 
     $('.js-sar-complete-proof-reminder').each(function(){
         var currentSession = window.sessions.current() || window.sessions.create(true);

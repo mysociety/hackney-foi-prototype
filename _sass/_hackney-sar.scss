@@ -125,6 +125,17 @@ body.sar-proof {
 
 .sar-person--add {
     display: block;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    text-align: inherit;
+    border: none;
+    cursor: pointer;
+
+    &:hover,
+    &:focus {
+        background-color: $light-blue-25;
+    }
 
     &:before {
         @extend .circle;
