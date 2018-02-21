@@ -10,7 +10,38 @@ bodyclass: "sar sar-check"
 
 <div style="max-width: 75%">
 
-    <h2 class="heading-medium">Your contact details</h2>
+    <h2 class="heading-medium">
+        Your request
+        <a href="type.html" class="button button-secondary">Edit</a>
+    </h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Request</th>
+                <td class="js-session-store" id="sar-request-body" style="white-space: pre"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="heading-medium">
+        Response delivery
+        <a href="delivery.html" class="button button-secondary">Edit</a>
+    </h2>
+
+    <table>
+        <tbody>
+            <tr>
+                <th>Delivery</th>
+                <td>You would like to receive the council’s response by <span class="js-session-store" id="sar-delivery"></span></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="heading-medium">
+        Your contact details
+        <a href="contact-details.html" class="button button-secondary">Edit</a>
+    </h2>
 
     <table>
         <tbody>
@@ -29,46 +60,12 @@ bodyclass: "sar sar-check"
         </tbody>
     </table>
 
-    <h2 class="heading-medium">People involved in this request</h2>
+    <h2 class="heading-medium">
+        People involved in this request
+        <a href="proof-1.html" class="button button-secondary">Edit</a>
+    </h2>
 
-    <table>
-        <tbody>
-            <tr>
-                <th>Name</th>
-                <td class="js-session-store" id="sar-subject-name"></td>
-            </tr>
-            <tr>
-                <th>Other names</th>
-                <td class="js-session-store" id="sar-subject-other-names"></td>
-            </tr>
-            <tr>
-                <th>Address</th>
-                <td class="js-session-store" id="sar-subject-address" style="white-space: pre"></td>
-            </tr>
-            <tr>
-                <th>Date of birth</th>
-                <td class="js-session-store" id="sar-subject-dob"></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <h2 class="heading-medium">Request details</h2>
-
-    <table>
-        <tbody>
-            <!-- TODO: request type -->
-            <tr>
-                <th>Request</th>
-                <td class="js-session-store" id="sar-request-body" style="white-space: pre"></td>
-            </tr>
-            <tr>
-                <th>Response</th>
-                <td>You would like to receive the council’s response by <span class="js-session-store" id="sar-delivery"></span></td>
-            </tr>
-        </tbody>
-    </table>
-
-    <div class="js-sar-complete-proof-reminder"></div>
+    <div class="js-sar-subject-summary"></div>
 
 </div>
 

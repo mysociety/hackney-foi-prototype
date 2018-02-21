@@ -148,3 +148,36 @@ body.sar-proof {
 .sar-check table th {
     width: 25%;
 }
+
+body.sar-check {
+    counter-reset: sar-people;
+
+    h2 {
+        margin-top: 3em;
+
+        .button {
+            font-size: 0.6em;
+            margin-left: 1em;
+        }
+    }
+
+    .cta-section {
+        margin-top: 3em;
+    }
+}
+
+.sar-subject-summary {
+    counter-increment: sar-people;
+    position: relative;
+    padding-left: 70px;
+    margin-bottom: 1.5em;
+
+    &:before {
+        @extend .circle;
+        @extend .circle-step-large;
+        content: counter(sar-people);
+        position: absolute;
+        top: 0.3em;
+        left: 0;
+    }
+}

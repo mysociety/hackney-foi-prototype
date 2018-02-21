@@ -323,6 +323,34 @@ var subjectRequiresLetterOfAuthority = function subjectRequiresLetterOfAuthority
     }
 }
 
+var setUpSarSubjectSummary = function setUpSarSubjectSummary(){
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var subjects = getSubjects(currentSession);
+    var template = $.templates("#sarSubjectSummary");
+    var $container = $(this);
+
+    var createPersonSummary = function createPersonForm(subjectIndex, subject) {
+        var $personSummary = $( template.render({
+            subject: subject,
+            i: subjectIndex,
+            requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
+            requiresLetterOfAuthority: subjectRequiresLetterOfAuthority(subject)
+        }) );
+        return $personSummary;
+    }
+
+    $container.empty();
+
+    if ( subjects.length ) {
+        $.each(subjects, function(subjectIndex, subject){
+            var $personSummary = createPersonSummary(subjectIndex, subject);
+            $personSummary.appendTo($container);
+        });
+    } else {
+        $container.append('<p>No subjects have been selected.</p>');
+    }
+}
+
 $(function(){
     $('[data-aside]').each(function(){
         var $control = $(this);
@@ -377,6 +405,8 @@ $(function(){
 
     // setUpTextReflectsInput();
     // setUpShowIfYoungerThan18();
+
+    $('.js-sar-subject-summary').each(setUpSarSubjectSummary);
 
     $('.js-sar-complete-proof-reminder').each(function(){
         var currentSession = window.sessions.current() || window.sessions.create(true);

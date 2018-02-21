@@ -1,0 +1,45 @@
+<div class="sar-subject-summary">
+    <table>
+        <tbody>
+            <tr>
+                <th>Name</th>
+                <td>[[: subject['subject-name'] ]]</td>
+            </tr>
+          [[if subject['other-names'] ]]
+            <tr>
+                <th>Other names</th>
+                <td>[[: subject['subject-name'] ]]</td>
+            </tr>
+          [[/if]]
+            <tr>
+                <th>Address</th>
+                <td style="white-space: pre">[[: subject['subject-address'] ]]</td>
+            </tr>
+            <tr>
+                <th>Date of birth</th>
+                <td>[[: subject['subject-dob'] ]]</td>
+            </tr>
+            <tr>
+                <th>Documents</th>
+              [[if subject['document-delivery-method'] === 'upload-now' ]]
+                <td>
+                    Proof of identity
+                  [[if requiresProofOfAddress]]
+                    and proof of address
+                  [[/if]]
+                  [[if requiresLetterOfAuthority]]
+                    and letter of consent
+                  [[/if]]
+                    uploaded.
+                </td>
+              [[else subject['document-delivery-method'] === 'upload-later' ]]
+                <td>You have opted to upload documents for this person at a later date.</td>
+              [[else subject['document-delivery-method'] === 'post' ]]
+                <td>You have opted to provide documents for this person by post.</td>
+              [[else subject['document-delivery-method'] === 'service-centre' ]]
+                <td>You have opted to bring documents for this person to a Hackney Council service centre.</td>
+              [[/if]]
+          </tr>
+        </tbody>
+    </table>
+</div>
