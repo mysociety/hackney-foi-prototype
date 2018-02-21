@@ -83,38 +83,108 @@ var getSubjects = function getSubjects(stateObject) {
     return subjects;
 }
 
+// Similar to the .js-session-store change event handler, except, rather than
+// just saving directly into the session, it constructs a "subjects" list,
+// that _then_ gets saved as session["sar-subjects"].
+var saveSarSubjectField = function saveSarSubjectField($el, subjectIndex) {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var subjects = getSubjects(currentSession);
+    var name = $el.attr('name');
+
+    if ( ! isset(subjects[subjectIndex]) ) {
+        subjects[subjectIndex] = {};
+    }
+
+    // This bit is ripped off from .js-session-store.
+    if ( $el.is('input[type="radio"], input[type="checkbox"]') ) {
+        if ( $el.prop('checked') ) {
+            subjects[subjectIndex][name] = $el.val();
+        } else if ( isset(subjects[subjectIndex][name]) ) {
+            delete subjects[subjectIndex][name];
+        }
+
+    } else if ( $el.is('input, textarea, select') ) {
+        var val = $el.val();
+
+        if ( val ) {
+            subjects[subjectIndex][name] = val;
+        } else if ( isset(subjects[subjectIndex][name]) ) {
+            delete subjects[subjectIndex][name];
+        }
+    }
+
+    currentSession["sar-subjects"] = subjects;
+    window.sessions.save(currentSession);
+}
+
 var setUpSarPersonBuilder = function setUpSarPersonBuilder(){
     var currentSession = window.sessions.current() || window.sessions.create(true);
     var subjects = getSubjects(currentSession);
     var template = $.templates("#sarSubjectDetails");
     var $container = $(this);
 
-    $container.empty();
-
-    if ( subjects.length ) {
-        $.each(subjects, function(i, subject){
-            $container.append( template.render({
-                subject: subject,
-                i: i
-            }) );
-        });
-    } else {
-        $container.append( template.render({
-            subject: {},
-            i: 0
+    // This is the core of the whole thing - given the data required to describe
+    // a person, it creates the form for that person, with all the right data
+    // pre-populated, and all the necessary event listeners bound to the inputs
+    // to handle saving of user input and stuff like that.
+    var createPersonForm = function createPersonForm(subjectIndex, subject) {
+        var $personForm = $( template.render({
+            subject: subject,
+            i: subjectIndex
         }) );
+
+        $personForm.on('change', '.form-control', function(){
+            saveSarSubjectField($(this), subjectIndex);
+        });
+
+        setUpTextReflectsInput($personForm, true);
+        setUpShowIfYoungerThan18($personForm, true);
+
+        return $personForm;
     }
 
-    var $addButton = $('<button>')
-        .addClass('sar-person sar-person--add')
-        .text('Add another person')
-        .on('click', function(){
-            $( template.render({
-                subject: {},
-                i: $addButton.prevAll('.sar-person').length
-            }) ).insertBefore($addButton);
-        })
-        .appendTo($container);
+    $container.empty();
+
+    // No subjects are stored in the session. So, let's seed the data for a
+    // first one, which will get saved when the user starts changing values.
+    if ( subjects.length === 0 ) {
+        if ( isset(currentSession['sar-subject-myself']) ) {
+            subjects.push({
+                "is-requestor": true,
+                "subject-name": currentSession['sar-requestor-name']
+            });
+            // We're going to autopopulate the first subject name input
+            // with the requestor's name. But, if the user never triggers
+            // a "change" event on that input, the value will never get
+            // saved. We could trigger the "change" event manually, but
+            // the DOM element hasn't actually been created yet, so it's
+            // easier to just save the subject right now.
+            currentSession["sar-subjects"] = subjects;
+            window.sessions.save(currentSession);
+        } else {
+            subjects.push({});
+        }
+    }
+
+    $.each(subjects, function(subjectIndex, subject){
+        var $personForm = createPersonForm(subjectIndex, subject);
+        $personForm.appendTo($container);
+    });
+
+    if ( isset(currentSession['sar-subject-myself']) && !isset(currentSession['sar-subject-others']) ) {
+        if ( subjects.length === 1 ) {
+            $container.prev('h1').text('Tell us more about yourself');
+        }
+    } else {
+        var $addButton = $('<button>')
+            .addClass('sar-person sar-person--add')
+            .text('Add another person')
+            .on('click', function(){
+                var $personForm = createPersonForm($addButton.prevAll('.sar-person').length, {});
+                $personForm.insertBefore($addButton);
+            })
+            .appendTo($container);
+    }
 }
 
 var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
@@ -140,6 +210,57 @@ var setUpSarDocumentUpload = function setUpSarDocumentUpload() {
     } else {
         console.log('You have no subjects. Redirecting to ./proof-1.html…');
     }
+}
+
+var setUpTextReflectsInput = function setUpTextReflectsInput($context, force){
+    var $context = $context || document;
+    $('[data-text-reflects-input]', $context).each(function(){
+        var $el = $(this);
+        var originalText = $el.text();
+        var $input = $( $el.attr('data-text-reflects-input'), $context );
+
+        var updateText = function updateText() {
+            var inputVal = $.trim( $input.val() );
+            if ( inputVal === '' ){
+                $el.text(originalText);
+            } else {
+                $el.text(inputVal);
+            }
+        };
+
+        $input.on('change', updateText);
+
+        if ( force ) {
+            updateText();
+        }
+    });
+}
+
+var setUpShowIfYoungerThan18 = function setUpShowIfYoungerThan18($context, force) {
+    var $context = $context || document;
+    $('[data-show-if-younger-than-18]', $context).each(function(){
+        var $el = $(this);
+        var $input = $( $el.attr('data-show-if-younger-than-18'), $context );
+
+        var updateVisibility = function updateVisibility() {
+            var inputVal = $.trim( $input.val() );
+            if ( inputVal === '' ){
+                $el.addClass('js-hidden');
+            } else {
+                if ( ageInYears($input.val()) < 18 ) {
+                    $el.removeClass('js-hidden');
+                } else {
+                    $el.addClass('js-hidden');
+                }
+            }
+        }
+
+        $input.on('change', updateVisibility);
+
+        if ( force ) {
+            updateVisibility();
+        }
+    });
 }
 
 $(function(){
@@ -176,67 +297,8 @@ $(function(){
 
     $('.js-sar-document-upload').each(setUpSarDocumentUpload);
 
-    // TODO: The subject name inputs are generated after page load,
-    // by setUpSarPersonBuilder. So this selector will never match
-    // any elements (at page load).
-    // $('[data-text-reflects-input]').each(function(){
-    //     var $el = $(this);
-    //     var originalText = $el.text();
-    //     var $input = $( $el.attr('data-text-reflects-input') );
-    //
-    //     $input.on('change', function(){
-    //         var inputVal = $.trim( $input.val() );
-    //         if ( inputVal === '' ){
-    //             $el.text(originalText);
-    //         } else {
-    //             $el.text(inputVal);
-    //         }
-    //     });
-    // });
-
-    // TODO: The "younger than 18" date input is generated after
-    // page load, by setUpSarPersonBuilder. So this selector will
-    // never match any elements (at page load).
-    // $('[data-show-if-younger-than-18]').each(function(){
-    //     var $el = $(this);
-    //     var $input = $( $el.attr('data-show-if-younger-than-18') );
-    //
-    //     $input.on('change', function(){
-    //         var inputVal = $.trim( $input.val() );
-    //         if ( inputVal === '' ){
-    //             $el.addClass('js-hidden');
-    //         } else {
-    //             if ( ageInYears($input.val()) < 18 ) {
-    //                 $el.removeClass('js-hidden');
-    //             } else {
-    //                 $el.addClass('js-hidden');
-    //             }
-    //         }
-    //     });
-    // });
-
-    // TODO: We’re changing how sar subjects are stored in the session
-    // so currentSession['sar-requestor-name'] here will need to change.
-    // $('input[name="sar-subject-myself"]').on('change', function(){
-    //     if ( $('#sar-subject-myself').is(':checked') ) {
-    //         var currentSession = window.sessions.current() || window.sessions.create(true);
-    //         if ( isset(currentSession['sar-requestor-name']) ) {
-    //             currentSession['sar-subject-name'] = currentSession['sar-requestor-name'];
-    //             window.sessions.save(currentSession);
-    //         }
-    //     }
-    // });
-
-    // TODO: This should be built into setUpSarPersonBuilder rather than
-    // being performed on page load here.
-    // if ( $('body').is('.sar-proof-1') ) {
-    //     var currentSession = window.sessions.current() || window.sessions.create(true);
-    //     if ( isset(currentSession['sar-subject-myself']) && ! isset(currentSession['sar-subject-others']) ) {
-    //         $('h1').text('Tell us more about yourself');
-    //         $('label[for="sar-subject-other-names"]').text('Other names you have used');
-    //         $('.sar-person--add').hide();
-    //     }
-    // };
+    // setUpTextReflectsInput();
+    // setUpShowIfYoungerThan18();
 
     // Skip proof-3 (upload) page if another provision method is selected.
     // TODO: This should be built into setUpSarPersonBuilder rather than

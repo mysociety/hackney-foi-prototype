@@ -63,7 +63,7 @@ body.admin {
 
     th, td {
         font-size: 0.8em;
-        padding: 0.6em 1em;
+        padding: 0.6em 1em !important;
         border-bottom: none;
     }
 
@@ -72,8 +72,18 @@ body.admin {
     }
 
     tr:nth-child(even) {
-        td, th {
+        & > td,
+        & > th {
             background-color: lighten($grey-3, 5%);
+        }
+    }
+
+    table table {
+        margin: 0;
+        border: 2px solid #fff;
+
+        & + table {
+            margin-top: 0.5em;
         }
     }
 }

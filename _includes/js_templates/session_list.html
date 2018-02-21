@@ -14,7 +14,22 @@
               [[props]]
                 <tr>
                     <th>[[>key]]</th>
-                    <td>[[>prop]]</td>
+                    <td>
+                      [[if key === 'sar-subjects']]
+                        [[for prop]]
+                          <table>
+                            [[props]]
+                              <tr>
+                                  <th>[[>key]]</th>
+                                  <td>[[>prop]]</td>
+                              </tr>
+                            [[/props]]
+                          </table>
+                        [[/for]]
+                      [[else]]
+                        [[>prop]]
+                      [[/if]]
+                    </td>
                 </tr>
               [[/props]]
             </table>

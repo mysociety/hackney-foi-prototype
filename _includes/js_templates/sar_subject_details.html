@@ -1,30 +1,38 @@
 <form class="sar-person">
     <header>
-        <h2 class="heading-large" data-text-reflects-input="#sar-subject-name">Person #[[:i + 1]]</h2>
+        <h2 class="heading-large" data-text-reflects-input="#sar-subject-[[: i ]]-name">Person #[[: i + 1 ]]</h2>
     </header>
 
     <div class="grid-row">
         <div class="column-two-thirds">
 
             <div class="form-group">
-                <label class="form-label" for="sar-subject-name">Full name</label>
-                <input type="text" class="form-control form-control-3-4" name="sar-subject-name" id="sar-subject-name" data-aside="#tips">
+                <label class="form-label" for="sar-subject-[[: i ]]-name">Full name</label>
+                <input type="text" class="form-control form-control-3-4" name="subject-name" id="sar-subject-[[: i ]]-name" data-aside="#tips" value="[[: subject['subject-name'] ]]">
             </div>
             <div class="form-group">
-                <label class="form-label" for="sar-subject-other-names">Other names this person has used</label>
-                <input type="email" class="form-control form-control-3-4" name="sar-subject-other-names" id="sar-subject-other-names">
+                <label class="form-label" for="sar-subject-[[: i ]]-other-names">
+                    Other names
+                  [[if subject['is-requestor'] ]]
+                    you have
+                  [[else]]
+                    this person has
+                  [[/if]]
+                    used
+                </label>
+                <input type="text" class="form-control form-control-3-4" name="subject-other-names" id="sar-subject-[[: i ]]-other-names" value="[[: subject['subject-other-names'] ]]">
             </div>
             <div class="form-group">
-                <label class="form-label" for="sar-subject-address">Address</label>
-                <textarea rows="5" class="form-control form-control-3-4" name="sar-subject-address" id="sar-subject-address"></textarea>
+                <label class="form-label" for="sar-subject-[[: i ]]-address">Address</label>
+                <textarea rows="5" class="form-control form-control-3-4" name="subject-address" id="sar-subject-[[: i ]]-address">[[: subject['subject-address'] ]]</textarea>
             </div>
             <div class="form-group">
-                <label class="form-label" for="sar-subject-dob">Date of birth</label>
-                <input type="date" class="form-control form-control-3-4" name="sar-subject-dob" id="sar-subject-dob">
+                <label class="form-label" for="sar-subject-[[: i ]]-dob">Date of birth</label>
+                <input type="date" class="form-control form-control-3-4" name="subject-dob" id="sar-subject-[[: i ]]-dob"  value="[[: subject['subject-dob'] ]]">
             </div>
-            <div class="form-group multiple-choice js-hidden" style="float: none;" data-show-if-younger-than-18="#sar-subject-dob">
-                <input type="checkbox" class="form-control" name="sar-parental-responsibility" id="sar-parental-responsibility">
-                <label class="form-label" for="sar-parental-responsibility">I have parental responsibility for this person</label>
+            <div class="form-group multiple-choice js-hidden" style="float: none;" data-show-if-younger-than-18="#sar-subject-[[: i ]]-dob">
+                <input type="checkbox" [[if subject['requestor-has-parental-responsibility'] ]]checked[[/if]] class="form-control" name="requestor-has-parental-responsibility" id="sar-subject-[[: i ]]-parental">
+                <label class="form-label" for="sar-subject-[[: i ]]-parental">I have parental responsibility for this person</label>
             </div>
 
         </div>
