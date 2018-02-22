@@ -11,19 +11,30 @@ bodyclass: "sar sar-delivery"
 
         <legend class="visually-hidden">How do you want to receive your response?</legend>
 
-        <div class="multiple-choice">
+        <div class="multiple-choice" data-target="sar-delivery-email-config">
             <input type="radio" class="js-session-store" name="sar-delivery" id="sar-delivery-email" value="email">
             <label for="sar-delivery-email">By email</label>
         </div>
+        <div class="panel panel-border-narrow js-hidden" id="sar-delivery-email-config">
+            <label class="form-label" for="sar-requestor-email">Email address</label>
+            <input class="form-control js-session-store" name="sar-requestor-email" type="email" id="sar-requestor-email">
+        </div>
 
-        <div class="multiple-choice">
+        <div class="multiple-choice" data-target="sar-delivery-post-config">
             <input type="radio" class="js-session-store" name="sar-delivery" id="sar-delivery-post" value="post">
             <label for="sar-delivery-post">By post</label>
         </div>
+        <div class="panel panel-border-narrow js-hidden" id="sar-delivery-post-config">
+            <label class="form-label" for="sar-requestor-postal-address">Postal address</label>
+            <textarea class="form-control js-session-store" name="sar-requestor-postal-address" id="sar-requestor-postal-address" rows="5"></textarea>
+        </div>
 
-        <div class="multiple-choice">
+        <div class="multiple-choice" data-target="sar-delivery-collection-config">
             <input type="radio" class="js-session-store" name="sar-delivery" id="sar-delivery-service-centre" value="service-centre">
             <label for="sar-delivery-service-centre">Collect from a council service centre</label>
+        </div>
+        <div class="panel panel-border-narrow js-hidden" id="sar-delivery-collection-config">
+            <p class="text">The address of your local service centre will be shown, and also emailed to you, at the end of this process.</p>
         </div>
 
     </fieldset>
