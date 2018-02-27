@@ -148,7 +148,12 @@ var setUpSarPersonBuilder = function setUpSarPersonBuilder(){
     // No subjects are stored in the session. So, let's seed the data for a
     // first one, which will get saved when the user starts changing values.
     if ( subjects.length === 0 ) {
-        if ( isset(currentSession['sar-subject-myself']) ) {
+        if (
+            isset(currentSession['sar-subject']) && (
+                currentSession['sar-subject'] === 'me' ||
+                currentSession['sar-subject'] === 'me-and-others'
+            )
+        ) {
             subjects.push({
                 "is-requestor": true,
                 "subject-name": currentSession['sar-requestor-name']
@@ -171,7 +176,7 @@ var setUpSarPersonBuilder = function setUpSarPersonBuilder(){
         $personForm.appendTo($container);
     });
 
-    if ( isset(currentSession['sar-subject-myself']) && !isset(currentSession['sar-subject-others']) ) {
+    if ( isset(currentSession['sar-subject']) && currentSession['sar-subject'] === 'me' ) {
         if ( subjects.length === 1 ) {
             $container.prev('h1').text('Tell us more about yourself');
         }
@@ -398,6 +403,26 @@ $(function(){
                     return false;
                 }
             });
+
+            window.location.href = path;
+        });
+    });
+
+    $('[data-path-if-proxy-request]').each(function(){
+        var $button = $(this);
+
+        $button.on('click', function(e){
+            e.preventDefault();
+            var path = $button.attr('href');
+
+            var currentSession = window.sessions.current() || window.sessions.create(true);
+            var sarProxy = currentSession['sar-proxy'];
+
+            if ( isset(sarProxy) && sarProxy === 'yes' ) {
+                path = $button.attr('data-path-if-proxy-request');
+                currentSession['sar-subject'] = 'others';
+                window.sessions.save(currentSession);
+            }
 
             window.location.href = path;
         });

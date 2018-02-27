@@ -1,29 +1,35 @@
 ---
 layout: default
-title: "Who is this request about?"
+title: "Who is the information about?"
 bodyclass: "sar sar-subject"
 ---
 
-<h1 class="heading-xlarge">Who is this request about?</h1>
+<h1 class="heading-xlarge">Who is the information about?</h1>
 
-<form action="proof-1.html">
+<form>
     <fieldset>
 
-        <legend class="visually-hidden">Who is this request about?</legend>
+        <legend class="visually-hidden">Who is the information about?</legend>
 
         <div class="multiple-choice">
-            <input type="checkbox" name="sar-subject-myself" id="sar-subject-myself" class="js-session-store" value="myself">
-            <label for="sar-subject-myself">Myself</label>
+            <input type="radio" name="sar-subject" id="sar-subject-me" class="js-session-store" value="me">
+            <label for="sar-subject-me">Just me</label>
         </div>
 
         <div class="multiple-choice">
-            <input type="checkbox" name="sar-subject-others" id="sar-subject-others" class="js-session-store" value="others">
-            <label for="sar-subject-others">Others</label>
+            <input type="radio" name="sar-subject" id="sar-subject-me-and-others" class="js-session-store" value="me-and-others">
+            <label for="sar-subject-me-and-others">Me and other people</label>
+        </div>
+
+        <div class="multiple-choice">
+            <input type="radio" name="sar-subject" id="sar-subject-others" class="js-session-store" value="others">
+            <label for="sar-subject-others">Just other people</label>
         </div>
 
     </fieldset>
 
     <p class="cta-section">
-        <button type="submit" class="button">Next</button>
+        <a class="button button-secondary" href="saved.html">Save and continue later</a>
+        <a href="proof-1.html" class="button">Next</a>
     </p>
 </form>
