@@ -202,8 +202,7 @@ var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
         var $personForm = $( template.render({
             subject: subject,
             i: subjectIndex,
-            requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
-            requiresLetterOfAuthority: subjectRequiresLetterOfAuthority(subject)
+            requiresProofOfAddress: subjectRequiresProofOfAddress(subject)
         }) );
 
         $personForm.on('change', '.form-control', function(){
@@ -235,8 +234,7 @@ var setUpSarDocumentUpload = function setUpSarDocumentUpload() {
         var $personForm = $( template.render({
             subject: subject,
             i: subjectIndex,
-            requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
-            requiresLetterOfAuthority: subjectRequiresLetterOfAuthority(subject)
+            requiresProofOfAddress: subjectRequiresProofOfAddress(subject)
         }) );
         return $personForm;
     }
@@ -312,7 +310,7 @@ var subjectRequiresProofOfAddress = function subjectRequiresProofOfAddress(subje
     }
 }
 
-var subjectRequiresLetterOfAuthority = function subjectRequiresLetterOfAuthority(subject) {
+var subjectRequiresLetterOfConsent = function subjectRequiresLetterOfConsent(subject) {
     if ( isset(subject['is-requestor']) ) {
         return false;
     } else if (
@@ -339,7 +337,7 @@ var setUpSarSubjectSummary = function setUpSarSubjectSummary(){
             subject: subject,
             i: subjectIndex,
             requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
-            requiresLetterOfAuthority: subjectRequiresLetterOfAuthority(subject)
+            requiresLetterOfConsent: subjectRequiresLetterOfConsent(subject)
         }) );
         return $personSummary;
     }

@@ -19,6 +19,12 @@
                 <th>Date of birth</th>
                 <td>[[: subject['subject-dob'] ]]</td>
             </tr>
+          [[if requiresLetterOfConsent]]
+            <tr>
+                <th>Consent</th>
+                <td>Once your request is submitted, we will contact you to verify you have consent to collect this person’s information.</td>
+            </tr>
+          [[/if]]
             <tr>
                 <th>Documents</th>
               [[if subject['document-delivery-method'] === 'upload-now' ]]
@@ -27,17 +33,35 @@
                   [[if requiresProofOfAddress]]
                     and proof of address
                   [[/if]]
-                  [[if requiresLetterOfAuthority]]
-                    and letter of consent
-                  [[/if]]
                     uploaded.
                 </td>
               [[else subject['document-delivery-method'] === 'upload-later' ]]
-                <td>You have opted to upload documents for this person at a later date.</td>
+                <td>
+                    You have opted to upload
+                    proof of identity
+                  [[if requiresProofOfAddress]]
+                    and proof of address
+                  [[/if]]
+                    for this person at a later date.
+                </td>
               [[else subject['document-delivery-method'] === 'post' ]]
-                <td>You have opted to provide documents for this person by post.</td>
+                <td>
+                    You have opted to provide
+                    proof of identity
+                  [[if requiresProofOfAddress]]
+                    and proof of address
+                  [[/if]]
+                    for this person by post.
+                </td>
               [[else subject['document-delivery-method'] === 'service-centre' ]]
-                <td>You have opted to bring documents for this person to the Hackney Service Centre.</td>
+                <td>
+                    You have opted to bring
+                    proof of identity
+                  [[if requiresProofOfAddress]]
+                    and proof of address
+                  [[/if]]
+                    for this person to the Hackney Service Centre.
+                </td>
               [[/if]]
           </tr>
         </tbody>
