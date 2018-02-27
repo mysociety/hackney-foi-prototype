@@ -1,50 +1,28 @@
 <div class="sar-requirements sar-requirements--emphasised">
-    <h2 class="heading-medium error-summary-heading">
-      [[if currentSession['sar-proof-delivery-method'] === 'service-centre']]
-        Remember to bring us your proof of identity
-      [[else]]
+    <h2 class="heading-medium error-summary-heading" style="margin-bottom: 0.5em;">
         Remember to send us your proof of identity
-      [[/if]]
     </h2>
 
-  [[if submitted]]
-    <p>We cannot begin processing this request until we have received documents for <strong>[[: currentSession['sar-subject-name'] ]]</strong>:</p>
-  [[else]]
-      [[if currentSession['sar-proof-delivery-method'] === 'service-centre']]
-        <p>You have opted to bring proof of identity for <strong>[[: currentSession['sar-subject-name'] ]]</strong> to a Hackney Service Centre.</p>
-      [[else currentSession['sar-proof-delivery-method'] === 'post']]
-        <p>You have opted to send your proof of identity for <strong>[[: currentSession['sar-subject-name'] ]]</strong> by post.</p>
-      [[else]]
-        <p>You have opted to upload your proof of identity for <strong>[[: currentSession['sar-subject-name'] ]]</strong> at a later date.</p>
+    <p>We cannot begin processing this request until we have received the following documents:</p>
+
+  [[for subjects]]
+
+    <h3 class="heading-medium">[[: #data['subject-name'] ]]</h3>
+    <ul class="list list-bullet">
+        <li>Proof of identity (Driving licence, passport, or birth certificate)</li>
+      [[if #data['requiresProofOfAddress'] ]]
+        <li>Proof of address (Utility bill, bank statement, or council tax bill)</li>
       [[/if]]
-  [[/if]]
-
-    <div class="clearfix" style="margin-bottom: 1em;">
-        <div class="sar-requirements__column">
-            <p>You must supply one of:</p>
-            <ul class="list-bullet body-text">
-                <li>Driving licence</li>
-                <li>Passport</li>
-                <li>Birth certificate</li>
-            </ul>
-        </div>
-        <div class="sar-requirements__column">
-            <p>And one of:</p>
-            <ul class="list-bullet body-text">
-                <li>Utility bill</li>
-                <li>Bank statement</li>
-                <li>Council tax bill</li>
-            </ul>
-        </div>
-    </div>
-
-  [[if currentSession['sar-proof-delivery-method'] === 'service-centre']]
-    <p><strong>You should bring the documents to:</strong></p>
-    <p>Hackney Service Centre<br>1 Hillman Street<br>London<br>E8 1DY</p>
-  [[else currentSession['sar-proof-delivery-method'] === 'post']]
-    <p><strong>You should post the documents to:</strong></p>
+    </ul>
+  [[if #data['document-delivery-method'] === 'upload-later' ]]
+    <p><strong>Uploaded</strong> via the link in the confirmation email we just sent to you.</p>
+  [[else #data['document-delivery-method'] === 'post' ]]
+    <p><strong>Posted to:</strong></p>
     <p><strong>Information Governance</strong><br>1 Hillman Street<br>London<br>E8 1DY</p>
-  [[else]]
-    <p>You should follow the link in the confirmation email we sent you, to upload scans or photographs of your documents.</p>
+  [[else #data['document-delivery-method'] === 'service-centre' ]]
+    <p><strong>Brought to:</strong></p>
+    <p>Hackney Service Centre<br>1 Hillman Street<br>London<br>E8 1DY</p>
   [[/if]]
+
+  [[/for]]
 </div>

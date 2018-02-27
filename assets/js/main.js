@@ -433,16 +433,25 @@ $(function(){
 
     $('.js-sar-complete-proof-reminder').each(function(){
         var currentSession = window.sessions.current() || window.sessions.create(true);
+        var subjects = getSubjects(currentSession);
+        var subjectsWithOutstandingDocuments = [];
+        var template = $.templates("#sarCompleteProofReminder");
         var $container = $(this);
-        var proofDelivery = currentSession['sar-proof-delivery-method'];
-        if ( isset(proofDelivery) && proofDelivery !== 'upload-now' ) {
-            var template = $.templates("#sarCompleteProofReminder");
+
+        $.each(subjects, function(subjectIndex, subject){
+            if ( isset(subject['document-delivery-method']) && subject['document-delivery-method'] !== 'upload-now' ) {
+                subject['requiresProofOfAddress'] = subjectRequiresProofOfAddress(subject);
+                subjectsWithOutstandingDocuments.push(subject);
+            }
+        });
+
+        if ( subjectsWithOutstandingDocuments.length ) {
             $container.show().html( template.render({
                 currentSession: currentSession,
-                submitted: $('body').is('.sar-complete')
+                subjects: subjectsWithOutstandingDocuments
             }) );
         } else {
-            $container.hide();
+            $container.hide().empty();
         }
     });
 
