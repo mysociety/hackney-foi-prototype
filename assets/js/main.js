@@ -354,6 +354,81 @@ var setUpSarSubjectSummary = function setUpSarSubjectSummary(){
     }
 }
 
+var foiSuggestions = {
+    "ceo-salary": [
+        {
+            title: "Senior officers’ pay",
+            excerpt: "<strong>Top 3 tiers of employees earning over £50,000.</strong> Information on the top three tiers of employees earning over £50,000, which is updated once a year. Date at which the information provided is true: 1 November 2017.",
+            url: "https://www.hackney.gov.uk/senior-officer-pay"
+        },
+        {
+            title: "How the council works",
+            excerpt: "In this introduction to the Council you can find out about the directly elected Mayor and who runs the Council. You can also find out about the Council's constitution, budget, finances, transparency and structure […] Chief Executive - Tim Shields […]",
+            url: "https://www.hackney.gov.uk/how-the-council-works"
+        }
+    ],
+    "carillion": [
+        {
+            title: "Council spending over £500 – Monthly spending reports",
+            excerpt: "Each month we will publish a list of all payments we make over £500 showing who we paid, how much we paid and what this was for […] This includes: all individual items we purchase, payments made to contractors carrying out work on our behalf, and other spending we incur.",
+            url: "https://www.hackney.gov.uk/budget-supplier-payments"
+        },
+        {
+            title: "Selling to the council",
+            excerpt: "The Council spends over £300 million every year on a wide range of goods, works and services to help us provide services to the people of Hackney […] <strong>Tender opportunities and contracts</strong> […] <strong>Work with the Council</strong> […]",
+            url: "https://www.hackney.gov.uk/procurement"
+        }
+    ],
+    "default": [
+        {
+            title: "An example request from the disclosure log",
+            excerpt: "In the real world, this would be an automatically-generated excerpt of text from the disclosure log entry, helping the user work out whether this is useful of not.",
+            url: "#"
+        },
+        {
+            title: "A useful item from the publication scheme",
+            excerpt: "This would be a text summary of a relevant page from the council’s publication scheme. Maybe it might be useful, maybe not.",
+            url: "#"
+        },
+        {
+            title: "A page from the council website",
+            excerpt: "The suggestion index would also include high-traffic pages from the council website, in which case, an excerpt of useful text from the page would appear here.",
+            url: "#"
+        }
+    ]
+}
+
+var showFoiSuggestions = function showFoiSuggestions() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var scenario = 'default';
+    var template = $.templates("#foiSuggestion");
+    var $container = $(this);
+
+    $container.empty();
+
+    if ( isset(currentSession['scenario']) && foiSuggestions.hasOwnProperty(currentSession['scenario']) ) {
+        scenario = currentSession['scenario'];
+    }
+
+    $.each(foiSuggestions[scenario], function(i, suggestion){
+        $( template.render(suggestion) ).appendTo($container);
+    });
+}
+
+var startScenario = function startScenario(e) {
+    e.preventDefault();
+
+    var $el = $(this);
+    var url = $el.attr('href');
+    var scenario = $el.attr('data-start-scenario');
+
+    var currentSession = window.sessions.create(true);
+    currentSession["scenario"] = scenario;
+    window.sessions.save(currentSession);
+
+    window.location.href = url;
+}
+
 $(function(){
     $('[data-aside]').each(function(){
         var $control = $(this);
@@ -381,6 +456,8 @@ $(function(){
             $formGroup.find('.form-control').addClass('form-control-error');
         }
     });
+
+    $('.js-foi-suggestions').each(showFoiSuggestions);
 
     $('.js-sar-subject-details').each(setUpSarPersonBuilder);
 
@@ -454,6 +531,8 @@ $(function(){
             $container.hide().empty();
         }
     });
+
+    $('[data-start-scenario]').on('click', startScenario);
 
     $('.js-session-list').each(function(){
         refreshSessionList($(this));
