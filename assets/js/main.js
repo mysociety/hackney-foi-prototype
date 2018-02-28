@@ -138,6 +138,7 @@ var setUpSarPersonBuilder = function setUpSarPersonBuilder(){
         });
 
         setUpTextReflectsInput($personForm, true);
+        setUpCombineDateFields($personForm, true);
         setUpShowIfYoungerThan18($personForm, true);
 
         return $personForm;
@@ -271,6 +272,35 @@ var setUpTextReflectsInput = function setUpTextReflectsInput($context, force){
 
         if ( force ) {
             updateText();
+        }
+    });
+}
+
+var setUpCombineDateFields = function setUpCombineDateFields($context, force) {
+    var $context = $context || document;
+    $('[data-combine-date-fields-into]', $context).each(function(){
+        var $fieldset = $(this);
+
+        var updateTarget = function updateTarget() {
+            var $target = $( $fieldset.attr('data-combine-date-fields-into'), $context );
+            var day = $.trim( $fieldset.find('input[name$="-day"]').val() );
+            var month = $.trim( $fieldset.find('input[name$="-month"]').val() );
+            var year = $.trim( $fieldset.find('input[name$="-year"]').val() );
+
+            if ( isset(day) && day !== '' && isset(month) && month !== '' && isset(year) && year !== '' ) {
+                var combined = '' + year + '-' + month + '-' + day;
+                $target.val(combined).trigger('change');
+            } else {
+                $target.val('').trigger('change');
+            }
+        }
+
+        $fieldset.on('change', function(){
+            updateTarget();
+        });
+
+        if ( force ) {
+            updateTarget();
         }
     });
 }
@@ -502,9 +532,6 @@ $(function(){
             window.location.href = path;
         });
     });
-
-    // setUpTextReflectsInput();
-    // setUpShowIfYoungerThan18();
 
     $('.js-sar-subject-summary').each(setUpSarSubjectSummary);
 

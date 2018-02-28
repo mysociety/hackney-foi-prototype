@@ -117,6 +117,10 @@ body.sar-proof {
         }
     }
 
+    .form-date .form-group + .form-group {
+        margin-top: 0;
+    }
+
     .sar-requirements {
         margin-bottom: 1em;
         padding-right: 0;

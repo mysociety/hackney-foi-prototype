@@ -28,8 +28,28 @@
                 <textarea rows="5" class="form-control form-control-3-4" name="subject-address" id="sar-subject-[[: i ]]-address">[[: subject['subject-address'] ]]</textarea>
             </div>
             <div class="form-group">
-                <label class="form-label" for="sar-subject-[[: i ]]-dob">Date of birth</label>
-                <input type="date" class="form-control form-control-3-4" name="subject-dob" id="sar-subject-[[: i ]]-dob"  value="[[: subject['subject-dob'] ]]">
+                <fieldset data-combine-date-fields-into="#sar-subject-[[: i ]]-dob">
+                    <legend>
+                        <span class="form-label-bold">
+                            Date of birth
+                        </span>
+                    </legend>
+                    <div class="form-date">
+                        <div class="form-group form-group-day">
+                            <label class="form-label" for="sar-subject-[[: i ]]-dob-day">Day</label>
+                            <input class="form-control" id="sar-subject-[[: i ]]-dob-day" name="subject-dob-day" pattern="[0-9]*" min="0" max="31" type="number" value="[[: subject['subject-dob-day'] ]]">
+                        </div>
+                        <div class="form-group form-group-month">
+                            <label class="form-label" for="sar-subject-[[: i ]]-dob-month">Month</label>
+                            <input class="form-control" id="sar-subject-[[: i ]]-dob-month" name="subject-dob-month" pattern="[0-9]*" min="0" max="12" type="number" value="[[: subject['subject-dob-month'] ]]">
+                        </div>
+                        <div class="form-group form-group-year">
+                            <label class="form-label" for="sar-subject-[[: i ]]-dob-year">Year</label>
+                            <input class="form-control" id="sar-subject-[[: i ]]-dob-year" name="subject-dob-year" pattern="[0-9]*" min="0" type="number" value="[[: subject['subject-dob-year'] ]]">
+                        </div>
+                    </div>
+                </fieldset>
+                <input type="hidden" class="form-control" id="sar-subject-[[: i ]]-dob" name="subject-dob" value="[[: subject['subject-dob'] ]]">
             </div>
             <div class="form-group multiple-choice js-hidden" style="float: none;" data-show-if-younger-than-18="#sar-subject-[[: i ]]-dob">
                 <input type="checkbox" [[if subject['requestor-has-parental-responsibility'] ]]checked[[/if]] class="form-control" name="requestor-has-parental-responsibility" id="sar-subject-[[: i ]]-parental">
