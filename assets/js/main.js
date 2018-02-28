@@ -532,6 +532,29 @@ $(function(){
         }
     });
 
+    $('.js-sar-complete-consent-warning').each(function(){
+        var currentSession = window.sessions.current() || window.sessions.create(true);
+        var subjects = getSubjects(currentSession);
+        var subjectsNeedingLetterOfConsent = [];
+        var $el = $(this);
+
+        $el.hide();
+
+        $.each(subjects, function(subjectIndex, subject){
+            if ( subjectRequiresLetterOfConsent(subject) ) {
+                subjectsNeedingLetterOfConsent.push(subject);
+            }
+        });
+
+        if ( isset(currentSession['sar-proxy']) && currentSession['sar-proxy'] === 'yes' ) {
+            var message = 'Since you are completing this form on behalf of someone else, we may contact you to ask for a <strong>Letter of Authority</strong>, before we can provide information about ' + (subjects.length === 1 ? 'this person' : 'these people') + '.';
+        } else if ( subjectsNeedingLetterOfConsent.length ) {
+            var message = 'We may contact you, to ask for <strong>Proof of Consent</strong>, before we can provide information about ' + (subjectsNeedingLetterOfConsent.length === 1 ? 'one' : 'some') + ' of the people in this request.';
+        }
+
+        $el.show().html(message);
+    });
+
     $('[data-start-scenario]').on('click', startScenario);
 
     $('.js-session-list').each(function(){
