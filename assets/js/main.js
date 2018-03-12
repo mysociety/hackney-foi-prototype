@@ -1,6 +1,32 @@
 // Default JsRender delimiters `{{…}}` conflict with Jekyll/Liquid.
 $.views.settings.delimiters("[[", "]]");
 
+$.views.helpers("listToHumanString", function(list, andor){
+    if ( list.length == 0 ) {
+        return '';
+    } else if ( list.length == 1 ) {
+        return '' + list[0];
+    } else if ( list.length == 2 ) {
+        return ' ' + list[0] + ' ' + andor + ' ' + list[1];
+    } else {
+        var r = '';
+        // Keep removing the first item from the list, until it’s empty.
+        while ( list.length > 0 ) {
+            if ( list.length === 1 ) {
+                // Last item!
+                r += andor + ' ' + list.shift();
+            } else {
+                r += list.shift() + ', ';
+            }
+        }
+        return r;
+    }
+});
+
+$.views.helpers("ucfirst", function(str){
+    return str.charAt(0).toUpperCase() + str.slice(1);
+});
+
 var refreshSessionList = function refreshSessionList($list){
     var allSessions = window.sessions.all();
     var template = $.templates("#sessionList");
@@ -203,7 +229,7 @@ var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
         var $personForm = $( template.render({
             subject: subject,
             i: subjectIndex,
-            requiresProofOfAddress: subjectRequiresProofOfAddress(subject)
+            proofOfAddressOptions: getProofOfAddressOptionsForSubject(subject)
         }) );
 
         $personForm.on('change', '.form-control', function(){
@@ -238,7 +264,7 @@ var setUpSarDocumentUpload = function setUpSarDocumentUpload() {
         var $personForm = $( template.render({
             subject: subject,
             i: subjectIndex,
-            requiresProofOfAddress: subjectRequiresProofOfAddress(subject)
+            proofOfAddressOptions: getProofOfAddressOptionsForSubject(subject)
         }) );
         return $personForm;
     }
@@ -376,12 +402,23 @@ var setUpShowIfYoungerThan18 = function setUpShowIfYoungerThan18($context, force
     });
 }
 
-var subjectRequiresProofOfAddress = function subjectRequiresProofOfAddress(subject) {
+var getProofOfAddressOptionsForSubject = function getProofOfAddressOptionsForSubject(subject) {
+    var options = [];
+
     if ( isset(subject['subject-dob']) && ageInYears(subject['subject-dob']) > 12 ) {
-        return true;
-    } else {
-        return false;
+        options.push('bank statement');
+
+        if ( ageInYears(subject['subject-dob']) < 18 ) {
+            options.push('doctor’s letter');
+        }
+
+        if ( ageInYears(subject['subject-dob']) > 15 ) {
+            options.push('utility bill');
+            options.push('council tax bill');
+        }
     }
+
+    return options;
 }
 
 var subjectRequiresLetterOfConsent = function subjectRequiresLetterOfConsent(subject) {
@@ -410,7 +447,7 @@ var setUpSarSubjectSummary = function setUpSarSubjectSummary(){
         var $personSummary = $( template.render({
             subject: subject,
             i: subjectIndex,
-            requiresProofOfAddress: subjectRequiresProofOfAddress(subject),
+            proofOfAddressOptions: getProofOfAddressOptionsForSubject(subject),
             requiresLetterOfConsent: subjectRequiresLetterOfConsent(subject)
         }) );
         return $personSummary;
@@ -552,7 +589,7 @@ $(function(){
 
         $.each(subjects, function(subjectIndex, subject){
             if ( isset(subject['document-delivery-method']) && subject['document-delivery-method'] !== 'upload-now' ) {
-                subject['requiresProofOfAddress'] = subjectRequiresProofOfAddress(subject);
+                subject['proofOfAddressOptions'] = getProofOfAddressOptionsForSubject(subject);
                 subjectsWithOutstandingDocuments.push(subject);
             }
         });

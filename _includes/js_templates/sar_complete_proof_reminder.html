@@ -10,8 +10,8 @@
     <h3 class="heading-medium">[[: #data['subject-name'] ]]</h3>
     <ul class="list list-bullet">
         <li>Proof of identity (Driving licence, passport, or birth certificate)</li>
-      [[if #data['requiresProofOfAddress'] ]]
-        <li>Proof of address (Utility bill, bank statement, or council tax bill)</li>
+      [[if #data['proofOfAddressOptions'].length ]]
+        <li>Proof of address ([[: ~ucfirst(~listToHumanString(#data['proofOfAddressOptions'], 'or')) ]])</li>
       [[/if]]
     </ul>
   [[if #data['document-delivery-method'] === 'upload-later' ]]
