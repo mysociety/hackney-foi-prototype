@@ -99,16 +99,14 @@ body.sar-proof {
         margin-bottom: 2em;
     }
 
-    .form-aside {
-        background-color: $light-blue-25;
-    }
-
     // margin-top works better with the optional
     // "parental responsibility" group at the end.
-    .form-group {
+    .form-group,
+    .form-aside {
         margin-bottom: 0;
 
-        & + .form-group {
+        & + .form-group,
+        & + .form-aside {
             margin-top: $gutter-half;
 
             @include media(tablet) {

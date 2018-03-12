@@ -10,31 +10,32 @@ bodyclass: "foi foi-contact-details"
 
 <div class="grid-row">
     <div class="column-two-thirds">
-        <form action="check.html">
+        <form>
             <div class="form-group">
                 <label class="form-label" for="foi-requestor-name">Full name</label>
-                <input type="text" class="form-control form-control-3-4 js-session-store" name="foi-requestor-name" id="foi-requestor-name" data-aside="#tips">
+                <input type="text" class="form-control form-control-3-4 js-session-store" name="foi-requestor-name" id="foi-requestor-name">
             </div>
+
             <div class="form-group">
                 <label class="form-label" for="foi-requestor-email">Email address</label>
                 <input type="email" class="form-control form-control-3-4 js-session-store" name="foi-requestor-email" id="foi-requestor-email">
             </div>
+
             <div class="form-group">
                 <label class="form-label" for="foi-requestor-email2">Email address again</label>
                 <input type="text" class="form-control form-control-3-4 js-session-store" name="foi-requestor-email2" id="foi-requestor-email2" data-inputs-must-match="#foi-requestor-email" data-inputs-mismatch-hint="This email address must match the one above">
             </div>
+
+            <aside class="form-aside">
+                <p class="font-xsmall text">
+                    We’ll only use these details for the handling of your request.
+                    <a href="#">Read&nbsp;more in our privacy statement.</a>
+                </p>
+            </aside>
+
             <p class="cta-section">
-                <button type="submit" class="button">Check your request</button>
+                <a href="check.html" class="button">Check your request</a>
             </p>
         </form>
-    </div>
-
-    <div class="column-one-third">
-        <aside id="tips" class="form-aside">
-            <ul class="list font-xsmall">
-                <li>We’ll only use these details for the handling of your request.</li>
-                <li><a href="#">Read more in our privacy statement.</a></li>
-            </ul>
-        </aside>
     </div>
 </div>

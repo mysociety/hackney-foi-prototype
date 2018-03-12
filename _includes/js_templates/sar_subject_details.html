@@ -3,70 +3,69 @@
         <h2 class="heading-large" data-text-reflects-input="#sar-subject-[[: i ]]-name">Person #[[: i + 1 ]]</h2>
     </header>
 
-    <div class="grid-row">
-        <div class="column-two-thirds">
+    <div class="text">
 
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-[[: i ]]-name">Full name</label>
-                <input type="text" class="form-control form-control-3-4" name="subject-name" id="sar-subject-[[: i ]]-name" data-aside="#tips" value="[[: subject['subject-name'] ]]">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-[[: i ]]-other-names">
-                    Other names
-                  [[if subject['is-requestor'] ]]
-                    you have
-                  [[else]]
-                    this person has
-                  [[/if]]
-                    used
-                    <span class="muted" style="margin-left: 0.2em;">(optional)</span>
-                </label>
-                <input type="text" class="form-control form-control-3-4" name="subject-other-names" id="sar-subject-[[: i ]]-other-names" value="[[: subject['subject-other-names'] ]]">
-            </div>
-            <div class="form-group">
-                <label class="form-label" for="sar-subject-[[: i ]]-address">Address</label>
-                <textarea rows="5" class="form-control form-control-3-4" name="subject-address" id="sar-subject-[[: i ]]-address">[[: subject['subject-address'] ]]</textarea>
-            </div>
-            <div class="form-group">
-                <fieldset data-combine-date-fields-into="#sar-subject-[[: i ]]-dob">
-                    <legend>
-                        <span class="form-label-bold">
-                            Date of birth
-                        </span>
-                    </legend>
-                    <div class="form-date">
-                        <div class="form-group form-group-day">
-                            <label class="form-label" for="sar-subject-[[: i ]]-dob-day">Day</label>
-                            <input class="form-control" id="sar-subject-[[: i ]]-dob-day" name="subject-dob-day" pattern="[0-9]*" min="0" max="31" type="number" value="[[: subject['subject-dob-day'] ]]">
-                        </div>
-                        <div class="form-group form-group-month">
-                            <label class="form-label" for="sar-subject-[[: i ]]-dob-month">Month</label>
-                            <input class="form-control" id="sar-subject-[[: i ]]-dob-month" name="subject-dob-month" pattern="[0-9]*" min="0" max="12" type="number" value="[[: subject['subject-dob-month'] ]]">
-                        </div>
-                        <div class="form-group form-group-year">
-                            <label class="form-label" for="sar-subject-[[: i ]]-dob-year">Year</label>
-                            <input class="form-control" id="sar-subject-[[: i ]]-dob-year" name="subject-dob-year" pattern="[0-9]*" min="0" type="number" value="[[: subject['subject-dob-year'] ]]">
-                        </div>
+        <div class="form-group">
+            <label class="form-label" for="sar-subject-[[: i ]]-name">Full name</label>
+            <input type="text" class="form-control form-control-3-4" name="subject-name" id="sar-subject-[[: i ]]-name" value="[[: subject['subject-name'] ]]">
+        </div>
+
+        <aside class="form-aside">
+            <ul class="list font-xsmall">
+                <li>We need this information to find the specified person in our records.</li>
+                <li>We’ll only use these details for the handling of your request.</li>
+                <li><a href="#">Read more in our privacy statement.</a></li>
+            </ul>
+        </aside>
+
+        <div class="form-group">
+            <label class="form-label" for="sar-subject-[[: i ]]-other-names">
+                Other names
+              [[if subject['is-requestor'] ]]
+                you have
+              [[else]]
+                this person has
+              [[/if]]
+                used
+                <span class="muted" style="margin-left: 0.2em;">(optional)</span>
+            </label>
+            <input type="text" class="form-control form-control-3-4" name="subject-other-names" id="sar-subject-[[: i ]]-other-names" value="[[: subject['subject-other-names'] ]]">
+        </div>
+
+        <div class="form-group">
+            <label class="form-label" for="sar-subject-[[: i ]]-address">Address</label>
+            <textarea rows="5" class="form-control form-control-3-4" name="subject-address" id="sar-subject-[[: i ]]-address">[[: subject['subject-address'] ]]</textarea>
+        </div>
+
+        <div class="form-group">
+            <fieldset data-combine-date-fields-into="#sar-subject-[[: i ]]-dob">
+                <legend>
+                    <span class="form-label-bold">
+                        Date of birth
+                    </span>
+                </legend>
+                <div class="form-date">
+                    <div class="form-group form-group-day">
+                        <label class="form-label" for="sar-subject-[[: i ]]-dob-day">Day</label>
+                        <input class="form-control" id="sar-subject-[[: i ]]-dob-day" name="subject-dob-day" pattern="[0-9]*" min="0" max="31" type="number" value="[[: subject['subject-dob-day'] ]]">
                     </div>
-                </fieldset>
-                <input type="hidden" class="form-control" id="sar-subject-[[: i ]]-dob" name="subject-dob" value="[[: subject['subject-dob'] ]]">
-            </div>
-            <div class="form-group multiple-choice js-hidden" style="float: none;" data-show-if-younger-than-18="#sar-subject-[[: i ]]-dob">
-                <input type="checkbox" [[if subject['requestor-has-parental-responsibility'] ]]checked[[/if]] class="form-control" name="requestor-has-parental-responsibility" id="sar-subject-[[: i ]]-parental">
-                <label class="form-label" for="sar-subject-[[: i ]]-parental">I have parental responsibility for this person</label>
-            </div>
-
+                    <div class="form-group form-group-month">
+                        <label class="form-label" for="sar-subject-[[: i ]]-dob-month">Month</label>
+                        <input class="form-control" id="sar-subject-[[: i ]]-dob-month" name="subject-dob-month" pattern="[0-9]*" min="0" max="12" type="number" value="[[: subject['subject-dob-month'] ]]">
+                    </div>
+                    <div class="form-group form-group-year">
+                        <label class="form-label" for="sar-subject-[[: i ]]-dob-year">Year</label>
+                        <input class="form-control" id="sar-subject-[[: i ]]-dob-year" name="subject-dob-year" pattern="[0-9]*" min="0" type="number" value="[[: subject['subject-dob-year'] ]]">
+                    </div>
+                </div>
+            </fieldset>
+            <input type="hidden" class="form-control" id="sar-subject-[[: i ]]-dob" name="subject-dob" value="[[: subject['subject-dob'] ]]">
         </div>
-        <div class="column-one-third">
 
-            <aside id="tips" class="form-aside">
-                <ul class="list font-xsmall">
-                    <li>We need this information to find the specified person in our records.</li>
-                    <li>We’ll only use these details for the handling of your request.</li>
-                    <li><a href="#">Read more in our privacy statement.</a></li>
-                </ul>
-            </aside>
-
+        <div class="form-group multiple-choice js-hidden" style="float: none;" data-show-if-younger-than-18="#sar-subject-[[: i ]]-dob">
+            <input type="checkbox" [[if subject['requestor-has-parental-responsibility'] ]]checked[[/if]] class="form-control" name="requestor-has-parental-responsibility" id="sar-subject-[[: i ]]-parental">
+            <label class="form-label" for="sar-subject-[[: i ]]-parental">I have parental responsibility for this person</label>
         </div>
+
     </div>
 </form>
