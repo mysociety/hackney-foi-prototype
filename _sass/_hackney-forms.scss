@@ -23,3 +23,21 @@
         }
     }
 }
+
+.post-cta-information {
+    .heading-medium {
+        margin-top: 1.5em;
+
+        @include media(tablet) {
+            margin-top: 3em;
+        }
+    }
+
+    .heading-small {
+        margin-top: 1em;
+
+        @include media(tablet) {
+            margin-top: 2em;
+        }
+    }
+}
