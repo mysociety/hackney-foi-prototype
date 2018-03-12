@@ -13,9 +13,12 @@ bodyclass: "sar sar-proxy"
 
         <p class="text">For example, are you a solicitor or a friend helping someone else access their own information?</p>
 
-        <div class="multiple-choice">
+        <div class="multiple-choice" data-target="sar-proxy-yes-warning">
             <input type="radio" name="sar-proxy" id="sar-proxy-yes" class="js-session-store" value="yes">
             <label for="sar-proxy-yes">Yes</label>
+        </div>
+        <div class="panel panel-border-narrow text js-hidden" id="sar-proxy-yes-warning">
+            <p>You will be asked to provide a Letter of Authority, to prove that you are entitled to act on the data subject’s behalf.</p>
         </div>
 
         <div class="multiple-choice">
