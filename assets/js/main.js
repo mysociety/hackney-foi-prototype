@@ -208,6 +208,7 @@ var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
 
         $personForm.on('change', '.form-control', function(){
             saveSarSubjectField($(this), subjectIndex);
+            toggleProofUploadCTA();
         });
 
         return $personForm;
@@ -220,6 +221,8 @@ var setUpSarDocumentOptions = function setUpSarDocumentOptions() {
             var $personForm = createPersonForm(subjectIndex, subject);
             $personForm.appendTo($container);
         });
+
+        toggleProofUploadCTA();
     } else {
         window.location.href = 'proof-1.html';
     }
@@ -249,6 +252,43 @@ var setUpSarDocumentUpload = function setUpSarDocumentUpload() {
         });
     } else {
         window.location.href = 'proof-1.html';
+    }
+}
+
+var toggleProofUploadCTA = function toggleProofUploadCTA(){
+    var $ctaSection = $('.js-sar-proof-upload-cta');
+    var nothingToUpload = true;
+
+    $('.sar-person input[name="document-delivery-method"][value="upload-now"]').each(function(){
+        if ( $(this).is(':checked') ) {
+            nothingToUpload = false;
+            return false;
+        }
+    });
+
+    if (nothingToUpload) {
+        $('a[href="proof-3.html"]', $ctaSection).addClass('js-hidden');
+        $('a[href="type.html"]', $ctaSection).removeClass('js-hidden');
+    } else {
+        $('a[href="proof-3.html"]', $ctaSection).removeClass('js-hidden');
+        $('a[href="type.html"]', $ctaSection).addClass('js-hidden');
+    }
+}
+
+var setUpSarProxyOptions = function setUpSarProxyOptions() {
+    $(this).on('change', toggleSarProxyCTA);
+    toggleSarProxyCTA();
+}
+
+var toggleSarProxyCTA = function toggleSarProxyCTA() {
+    var $ctaSection = $(this).find('.cta-section');
+
+    if ( $('[name="sar-proxy"][value="yes"]').is(':checked') ) {
+        $('a[href="subject.html"]', $ctaSection).addClass('js-hidden');
+        $('a[href="proof-1.html"]', $ctaSection).removeClass('js-hidden');
+    } else {
+        $('a[href="subject.html"]', $ctaSection).removeClass('js-hidden');
+        $('a[href="proof-1.html"]', $ctaSection).addClass('js-hidden');
     }
 }
 
@@ -489,49 +529,13 @@ $(function(){
 
     $('.js-foi-suggestions').each(showFoiSuggestions);
 
+    $('.js-sar-proxy-options').each(setUpSarProxyOptions);
+
     $('.js-sar-subject-details').each(setUpSarPersonBuilder);
 
     $('.js-sar-document-options').each(setUpSarDocumentOptions);
 
     $('.js-sar-document-upload').each(setUpSarDocumentUpload);
-
-    $('[data-path-if-nothing-to-upload]').each(function(){
-        var $button = $(this);
-
-        $button.on('click', function(e){
-            e.preventDefault();
-            var path = $button.attr('data-path-if-nothing-to-upload');
-
-            $('.sar-person input[name="document-delivery-method"][value="upload-now"]').each(function(){
-                if ( $(this).is(':checked') ) {
-                    path = $button.attr('href');
-                    return false;
-                }
-            });
-
-            window.location.href = path;
-        });
-    });
-
-    $('[data-path-if-proxy-request]').each(function(){
-        var $button = $(this);
-
-        $button.on('click', function(e){
-            e.preventDefault();
-            var path = $button.attr('href');
-
-            var currentSession = window.sessions.current() || window.sessions.create(true);
-            var sarProxy = currentSession['sar-proxy'];
-
-            if ( isset(sarProxy) && sarProxy === 'yes' ) {
-                path = $button.attr('data-path-if-proxy-request');
-                currentSession['sar-subject'] = 'others';
-                window.sessions.save(currentSession);
-            }
-
-            window.location.href = path;
-        });
-    });
 
     $('.js-sar-subject-summary').each(setUpSarSubjectSummary);
 
