@@ -541,15 +541,6 @@ var startScenario = function startScenario(e) {
 }
 
 $(function(){
-    $('[data-aside]').each(function(){
-        var $control = $(this);
-        var $aside = $( $(this).attr('data-aside') );
-
-        $control.on('focus', function(){
-            $aside.addClass('form-aside--active');
-        });
-    });
-
     $('[data-inputs-must-match]').on('change', function(){
         var $el = $(this);
         var $twin = $( $el.attr('data-inputs-must-match') );
