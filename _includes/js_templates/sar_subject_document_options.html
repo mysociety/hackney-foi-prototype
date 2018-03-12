@@ -12,13 +12,13 @@
                 <li>Birth certificate</li>
             </ul>
         </div>
-      [[if requiresProofOfAddress]]
+      [[if proofOfAddressOptions.length]]
         <div class="sar-requirements__column">
             <p>And one of:</p>
             <ul class="list-bullet body-text">
-                <li>Utility bill</li>
-                <li>Bank statement</li>
-                <li>Council tax bill</li>
+              [[for proofOfAddressOptions]]
+                <li>[[: ~ucfirst(#data) ]]</li>
+              [[/for]]
             </ul>
         </div>
       [[/if]]

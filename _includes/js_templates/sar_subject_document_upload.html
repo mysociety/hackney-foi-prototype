@@ -16,12 +16,12 @@
         <input type="file" name="sar-proof-of-name" id="sar-proof-of-name">
     </div>
 
-  [[if requiresProofOfAddress]]
+  [[if proofOfAddressOptions.length]]
     <div class="form-group">
         <label class="form-label" for="ni-number">
             Proof of address
             <span class="form-hint">
-                Utility bill, bank statement, or council tax bill
+                [[: ~ucfirst(~listToHumanString(proofOfAddressOptions, 'or')) ]]
             </span>
         </label>
         <input type="file" name="sar-proof-of-address" id="sar-proof-of-address">

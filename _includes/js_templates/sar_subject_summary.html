@@ -30,7 +30,7 @@
               [[if subject['document-delivery-method'] === 'upload-now' ]]
                 <td>
                     Proof of identity
-                  [[if requiresProofOfAddress]]
+                  [[if proofOfAddressOptions.length]]
                     and proof of address
                   [[/if]]
                     uploaded.
@@ -39,7 +39,7 @@
                 <td>
                     You have opted to upload
                     proof of identity
-                  [[if requiresProofOfAddress]]
+                  [[if proofOfAddressOptions.length]]
                     and proof of address
                   [[/if]]
                     for this person at a later date.
@@ -48,7 +48,7 @@
                 <td>
                     You have opted to provide
                     proof of identity
-                  [[if requiresProofOfAddress]]
+                  [[if proofOfAddressOptions.length]]
                     and proof of address
                   [[/if]]
                     for this person by post.
@@ -57,7 +57,7 @@
                 <td>
                     You have opted to bring
                     proof of identity
-                  [[if requiresProofOfAddress]]
+                  [[if proofOfAddressOptions.length]]
                     and proof of address
                   [[/if]]
                     for this person to the Hackney Service Centre.
