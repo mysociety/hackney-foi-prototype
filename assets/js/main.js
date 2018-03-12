@@ -327,7 +327,11 @@ var setUpCombineDateFields = function setUpCombineDateFields($context, force) {
             var month = $.trim( $fieldset.find('input[name$="-month"]').val() );
             var year = $.trim( $fieldset.find('input[name$="-year"]').val() );
 
-            if ( isset(day) && day !== '' && isset(month) && month !== '' && isset(year) && year !== '' ) {
+            if (
+                isset(day) && day !== '' &&
+                isset(month) && month !== '' &&
+                isset(year) && year !== '' && parseInt(year) > 999
+            ) {
                 var combined = '' + year + '-' + month + '-' + day;
                 $target.val(combined).trigger('change');
             } else {
@@ -335,7 +339,7 @@ var setUpCombineDateFields = function setUpCombineDateFields($context, force) {
             }
         }
 
-        $fieldset.on('change', function(){
+        $fieldset.on('change keyup', function(){
             updateTarget();
         });
 
