@@ -493,6 +493,33 @@ var setUpSarSubjectSummary = function setUpSarSubjectSummary(){
     }
 }
 
+var setUpSarComplete = function setUpSarComplete() {
+    var currentSession = window.sessions.current() || window.sessions.create(true);
+    var subjects = getSubjects(currentSession);
+    var template = $.templates("#sarComplete");
+    var $container = $(this);
+
+    var subjectsWithOutstandingDocuments = [];
+    var subjectsNeedingLetterOfConsent = [];
+    $.each(subjects, function(subjectIndex, subject){
+        if ( isset(subject['document-delivery-method']) && subject['document-delivery-method'] !== 'upload-now' ) {
+            subject['proofOfAddressOptions'] = getProofOfAddressOptionsForSubject(subject);
+            subjectsWithOutstandingDocuments.push(subject);
+        }
+
+        if ( subjectRequiresLetterOfConsent(subject) ) {
+            subjectsNeedingLetterOfConsent.push(subject);
+        }
+    });
+
+    $container.html( template.render({
+        currentSession: currentSession,
+        subjects: subjects,
+        subjectsWithOutstandingDocuments: subjectsWithOutstandingDocuments,
+        subjectsNeedingLetterOfConsent: subjectsNeedingLetterOfConsent
+    }) );
+}
+
 var foiSuggestions = {
     "ceo-salary": [
         {
@@ -581,54 +608,9 @@ $(function(){
 
     $('.js-sar-subject-summary').each(setUpSarSubjectSummary);
 
+    $('.js-sar-complete').each(setUpSarComplete);
+
     setUpCheckEmail();
-
-    $('.js-sar-complete-proof-reminder').each(function(){
-        var currentSession = window.sessions.current() || window.sessions.create(true);
-        var subjects = getSubjects(currentSession);
-        var subjectsWithOutstandingDocuments = [];
-        var template = $.templates("#sarCompleteProofReminder");
-        var $container = $(this);
-
-        $.each(subjects, function(subjectIndex, subject){
-            if ( isset(subject['document-delivery-method']) && subject['document-delivery-method'] !== 'upload-now' ) {
-                subject['proofOfAddressOptions'] = getProofOfAddressOptionsForSubject(subject);
-                subjectsWithOutstandingDocuments.push(subject);
-            }
-        });
-
-        if ( subjectsWithOutstandingDocuments.length ) {
-            $container.show().html( template.render({
-                currentSession: currentSession,
-                subjects: subjectsWithOutstandingDocuments
-            }) );
-        } else {
-            $container.hide().empty();
-        }
-    });
-
-    $('.js-sar-complete-consent-warning').each(function(){
-        var currentSession = window.sessions.current() || window.sessions.create(true);
-        var subjects = getSubjects(currentSession);
-        var subjectsNeedingLetterOfConsent = [];
-        var $el = $(this);
-
-        $el.hide();
-
-        $.each(subjects, function(subjectIndex, subject){
-            if ( subjectRequiresLetterOfConsent(subject) ) {
-                subjectsNeedingLetterOfConsent.push(subject);
-            }
-        });
-
-        if ( isset(currentSession['sar-proxy']) && currentSession['sar-proxy'] === 'yes' ) {
-            var message = 'Since you are completing this form on behalf of someone else, we may contact you to ask for a <strong>Letter of Authority</strong>, before we can provide information about ' + (subjects.length === 1 ? 'this person' : 'these people') + '.';
-        } else if ( subjectsNeedingLetterOfConsent.length ) {
-            var message = 'We may contact you, to ask for <strong>Proof of Consent</strong>, before we can provide information about ' + (subjectsNeedingLetterOfConsent.length === 1 ? 'one' : 'some') + ' of the people in this request.';
-        }
-
-        $el.show().html(message);
-    });
 
     $('[data-start-scenario]').on('click', startScenario);
 

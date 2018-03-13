@@ -1,0 +1,119 @@
+  [[if subjectsWithOutstandingDocuments.length ]]
+
+    <div style="margin: 2em 0;">
+        <h1 class="heading-xlarge" style="margin-bottom: 0.5em;">
+            Your request has been&nbsp;sent
+        </h1>
+        <p class="text">
+            Your reference number is
+            <strong class="bold">HA-00001-001</strong>
+            and we have emailed a copy of your request to
+            <strong class="bold">[[: currentSession['sar-requestor-email'] ]]</strong>.
+        </p>
+    </div>
+
+    <div class="sar-requirements sar-requirements--emphasised">
+        <h2 class="heading-large error-summary-heading" style="margin-bottom: 0.5em;">
+            But remember to send us your documents
+        </h2>
+
+        <p>We cannot begin processing this request until we have received documents for:</p>
+
+      [[for subjectsWithOutstandingDocuments]]
+        <details style="margin-top: 1em;">
+            <summary>[[: #data['subject-name'] ]] <span class="muted">
+              [[if #data['proofOfAddressOptions'].length ]]
+                (Proof of identity and proof of address)
+              [[else]]
+                (Proof of identity)
+              [[/if]]
+            </span></summary>
+            <div class="panel panel-border-narrow">
+                <p><strong>One of:</strong> Driving licence, passport, or birth certificate.</p>
+              [[if #data['proofOfAddressOptions'].length ]]
+                <p><strong>And one of:</strong> [[: ~ucfirst(~listToHumanString(#data['proofOfAddressOptions'], 'or')) ]].</p>
+              [[/if]]
+              [[if #data['document-delivery-method'] === 'upload-later' ]]
+                <p><strong>Uploaded</strong> via the link in the confirmation email we just sent to you.</p>
+              [[else #data['document-delivery-method'] === 'post' ]]
+                <p><strong>Posted to:</strong></p>
+                <p><strong>Information Governance</strong><br>1 Hillman Street<br>London<br>E8 1DY</p>
+              [[else #data['document-delivery-method'] === 'service-centre' ]]
+                <p><strong>Brought to:</strong></p>
+                <p>Hackney Service Centre<br>1 Hillman Street<br>London<br>E8 1DY</p>
+              [[/if]]
+            </div>
+        </details>
+      [[/for]]
+
+    </div>
+
+  [[else]]
+
+    <div class="govuk-box-highlight">
+        <h1 class="heading-xlarge">
+            Your request has been&nbsp;sent
+        </h1>
+        <p class="font-large">
+            Your reference number is <br>
+            <strong class="bold">HA-00001-001</strong>
+        </p>
+        <p class="font-medium">
+            We have emailed a copy to
+            <strong class="bold">[[: currentSession['sar-requestor-email'] ]]</strong>
+        </p>
+    </div>
+
+  [[/if]]
+
+<h2 class="heading-medium">What happens next?</h2>
+
+<div class="grid-row">
+    <div class="column-two-thirds">
+
+        <p class="text">
+            Your request will be reviewed by our team and a member of staff will be in touch if they have any questions or need any additional information.
+        </p>
+
+      [[if currentSession['sar-proxy'] === 'yes' ]]
+        <p class="text">
+            Since you are completing this form on behalf of someone else,
+            we may contact you to ask for a <strong>Letter of Authority</strong>
+            before we can provide information about
+          [[if subjects.length === 1 ]]
+            this person.
+          [[else]]
+            these people.
+          [[/if]]
+        </p>
+      [[else subjectsNeedingLetterOfConsent.length ]]
+        <p class="text">
+          We may contact you to ask for <strong>Proof of Consent</strong>
+          before we can provide information about
+          [[if subjectsNeedingLetterOfConsent.length === subjects.length ]]
+            the people
+          [[else subjectsNeedingLetterOfConsent.length === 1 ]]
+            one of the people
+          [[else]]
+            some of the people
+          [[/if]]
+            in this request
+        </p>
+      [[/if]]
+
+        <p class="text">
+            We aim to respond to all requests within 40 calendar days. We’re currently hitting this target for 8 out of 10 requests.
+        </p>
+
+    </div>
+    <div class="column-one-third">
+        <div class="data">
+          <span class="data-item bold-xxlarge">8/10</span>
+          <span class="data-item bold-xsmall">SARs currently being handled&nbsp;within 40 calendar days</span>
+        </div>
+    </div>
+</div>
+
+<p>
+    <a class="button button-secondary" href="#">Print this page</a>
+</p>
