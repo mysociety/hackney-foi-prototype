@@ -2,6 +2,17 @@
     width: 100%;
 }
 
+.js-check-email + .form-hint {
+    margin-top: 0.5em;
+    margin-bottom: 0;
+
+    label.fake-link {
+        color: $link-colour;
+        text-decoration: underline;
+        cursor: default;
+    }
+}
+
 .button-start,
 .button-get-started {
     padding: em(7) em(41) em(7) em(16);

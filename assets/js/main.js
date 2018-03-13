@@ -318,6 +318,34 @@ var toggleSarProxyCTA = function toggleSarProxyCTA() {
     }
 }
 
+var setUpCheckEmail = function setUpCheckEmail($context, force){
+    var $context = $context || document;
+    $('.js-check-email', $context).each(function(){
+        var $input = $(this);
+
+        var updateHint = function updateHint(){
+            var inputVal = $.trim( $input.val() );
+            var $hint = $input.next('.form-hint');
+
+            if ( $hint.length === 0 ) {
+                $hint = $('<p>').addClass('form-hint').insertAfter($input);
+            }
+
+            if ( inputVal === '' ){
+                $hint.text('Please check your email is correct.');
+            } else {
+                $hint.html('Please check <label for="' + $input.attr('id') + '" class="fake-link">' + inputVal + '</label> is correct.')
+            }
+        }
+
+        $input.on('change keyup', updateHint);
+
+        if ( force ) {
+            updateHint();
+        }
+    });
+}
+
 var setUpTextReflectsInput = function setUpTextReflectsInput($context, force){
     var $context = $context || document;
     $('[data-text-reflects-input]', $context).each(function(){
@@ -541,24 +569,6 @@ var startScenario = function startScenario(e) {
 }
 
 $(function(){
-    $('[data-inputs-must-match]').on('change', function(){
-        var $el = $(this);
-        var $twin = $( $el.attr('data-inputs-must-match') );
-        var $formGroup = $el.parents('.form-group');
-
-        if ( $el.val() == $twin.val() ) {
-            $formGroup.removeClass('form-group-error');
-            $formGroup.find('.error-message').remove();
-            $formGroup.find('.form-control-error').removeClass('form-control-error');
-        } else {
-            var $error = $('<span role="alert">').addClass('error-message');
-            $error.text( $el.attr('data-inputs-mismatch-hint') );
-            $error.insertBefore( $el );
-            $formGroup.addClass('form-group-error');
-            $formGroup.find('.form-control').addClass('form-control-error');
-        }
-    });
-
     $('.js-foi-suggestions').each(showFoiSuggestions);
 
     $('.js-sar-proxy-options').each(setUpSarProxyOptions);
@@ -570,6 +580,8 @@ $(function(){
     $('.js-sar-document-upload').each(setUpSarDocumentUpload);
 
     $('.js-sar-subject-summary').each(setUpSarSubjectSummary);
+
+    setUpCheckEmail();
 
     $('.js-sar-complete-proof-reminder').each(function(){
         var currentSession = window.sessions.current() || window.sessions.create(true);
