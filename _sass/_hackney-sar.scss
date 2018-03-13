@@ -1,6 +1,6 @@
 .sar-requirements {
     @extend %contain-floats;
-    padding: 30px 30px 30px 55px;
+    padding: $gutter $gutter $gutter ($gutter + 25px);
     border-top: 1px solid $grey-2;
     border-bottom: 1px solid $grey-2;
     position: relative;
@@ -34,7 +34,7 @@
     border: 5px solid $error-colour;
     margin-top: $gutter-half;
     margin-bottom: $gutter-half;
-    padding: 30px 30px 30px 85px;
+    padding: $gutter $gutter $gutter ($gutter + 25px + 30px);
 
     &:before {
         left: 30px;
@@ -46,7 +46,19 @@
     }
 }
 
+.sar-requirements__row {
+    overflow: auto; // plays better with negative margin than %contain-floats would
+    margin-bottom: (-1 * $gutter) !important; // override .sar-requirements:last-child
+
+    @include media(tablet) {
+        margin-left: (-1 * $gutter);
+        margin-right: (-1 * $gutter);
+    }
+}
+
 .sar-requirements__column {
+    padding-bottom: $gutter;
+
     & > :first-child {
         margin-top: 0;
     }
@@ -55,17 +67,11 @@
         margin-bottom: 0;
     }
 
-    & + .sar-requirements__column {
-        margin-top: 2em;
-    }
-
     @include media(tablet) {
         float: left;
-
-        & + .sar-requirements__column {
-            margin-top: 0;
-            margin-left: 2em;
-        }
+        padding-left: $gutter;
+        padding-right: $gutter;
+        max-width: 14em;
     }
 }
 
